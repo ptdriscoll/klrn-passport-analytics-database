@@ -1,0 +1,48 @@
+======================================================================================
+Total Passport members watching 
+
+SELECT COUNT(DISTINCT members_uid) AS total_members
+FROM Views
+WHERE date_time >= datetime('2016-04-01  00:00:00', 'localtime')
+AND date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
+
+======================================================================================
+Total members watching, with identifiable member ids, (but subtract 1 NULL from total)
+
+SELECT COUNT(DISTINCT Members.alleg_account_id) AS total_members_with_ids 
+FROM Members
+INNER JOIN Views ON Members.uid = Views.members_uid
+WHERE Members.alleg_account_id IS NOT NULL
+AND Views.date_time >= datetime('2016-04-01  00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
+
+======================================================================================
+Channel views per member id  
+
+SELECT 
+  Videos.content_channel,
+  Members.alleg_account_id,
+  COUNT(Views.id) AS views
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
+GROUP BY Members.alleg_account_id
+ORDER BY views DESC;
+
+======================================================================================
+Episode views per member id  
+
+SELECT 
+  Videos.content_channel,
+  Videos.title,
+  Members.alleg_account_id,
+  COUNT(Views.id) AS views
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
+GROUP BY Members.alleg_account_id
+ORDER BY views DESC;

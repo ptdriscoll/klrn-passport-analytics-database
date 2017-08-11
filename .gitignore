@@ -1,0 +1,9 @@
+.DS_Store
+*.pyc
+app/committed/
+app/database/
+app/output_graphics/
+app/output_tables/
+app/processing/
+ARCHIVED/
+reference/
