@@ -42,7 +42,7 @@ This will also add a processing folder to handle Excel files pulled from the Zip
 
 ### Searching the database
 
-Upload the database into a SQLite-compatible editor or viewer. A nice, free option is DB Browser for SQLite (see reference link below). 
+Upload the database into a SQLite-compatible editor or viewer. A nice, free option is DB Browser for SQLite (see link below). 
 
 With DB Browser open, click the Open Database button at the top. In the file navigator that opens, go to app/database in the application and load db.sqlite.
 
@@ -60,7 +60,7 @@ Running the file will create an output_tables folder with a csv file of the resu
 
 ### Cross-referencing membership data 
 
-You will want to check the database's membership_id column in the Members table to make sure that these were extracted correctly. You will also need custom code to interact with specific downloads from you membership RMS (KLRN uses Allegiance).
+You will want to check the database's membership_id column in the Members table to make sure that these were extracted correctly. You will also need custom code to interact with downloads from you membership RMS (KLRN uses Allegiance).
 
 In the app folder, the files queries_members_renewals.py and queries_members_segments.py show examples of how KLRN merges and segments viewer data with Excel files that have been placed in the members folder.
 
