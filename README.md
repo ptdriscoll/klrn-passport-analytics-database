@@ -15,25 +15,25 @@ Also in the app folder, open the db_process.py file. Under settings at the top, 
 For example:  
 
 ```python
-  #multiple files can be listed - important to seed start
-  toParse = [
-      'KLRN_export_1_5_2017_all.zip',
-      'KLRN_export_2_1_2017.zip',
-      'KLRN_export_3_1_2017.zip',
-      'KLRN_export_4_1_2017.zip',
-      'KLRN_export_5_1_2017.zip',
-      'KLRN_export_6_1_2017.zip',
-      'KLRN_export_7_1_2017.zip'
-  ] 
+#multiple files can be listed - important to seed start
+toParse = [
+    'KLRN_export_1_5_2017_all.zip',
+    'KLRN_export_2_1_2017.zip',
+    'KLRN_export_3_1_2017.zip',
+    'KLRN_export_4_1_2017.zip',
+    'KLRN_export_5_1_2017.zip',
+    'KLRN_export_6_1_2017.zip',
+    'KLRN_export_7_1_2017.zip'
+] 
 ```
 
 Also, just below this, delete or note out the repeated toParse list, like this:
 
 ```python
-  #this single override just updates the latest download 
-  #toParse = [
-  #    'KLRN_export_8_1_2017.zip'
-  #]  
+#this single override just updates the latest download 
+#toParse = [
+#    'KLRN_export_8_1_2017.zip'
+#]  
 ```
   
 Now save the changes to db_process.py, and run the file to create the database. 
