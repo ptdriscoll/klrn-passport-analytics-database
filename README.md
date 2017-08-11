@@ -50,6 +50,8 @@ Click the Browse Data tab to view, sort and filter the data tables.
 
 Click the Execute SQL tab to open an interface to run SQL queries. In the app folder, the files ref_queries.txt and ref_queries_members.txt provide some basic queries.
 
+!(http://www.onthemoveblog.com/web-apps/images/Top_Channel_Views.jpg)
+
 ### Visualizing data
 
 To run visualizations, the Python library matplotlib must be installed.  
