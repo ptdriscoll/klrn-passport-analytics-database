@@ -8,7 +8,7 @@ This allows searches on what viewers watch, when they watch and how much they wa
 
 This works with Python 2.7 and the Python libraries NumPy and pandas. So make sure those are installed.   
 
-After copying the application to your working environment, open the app folder and add the monthly Passport Zip files to the downloads folder.  
+After cloning the application to your working environment, open the app folder and add the monthly Passport Zip files to the downloads folder.  
 
 Also in the app folder, open the db_process.py file. Under settings at the top, add all the Zip file names to the toParse list. 
 
