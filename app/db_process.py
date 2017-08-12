@@ -121,6 +121,7 @@ dateToSeconds = lambda x: datetime_to_seconds(x)
 commits = []
 
 for file in toParse[:]: 
+    print 'PROCESSING:', file 
     
     #don't bring in header since it might be in wrong location
     df = pd.read_csv('processing/' + file[:-4] + '/KLRN/KLRN_1.csv', 
@@ -134,7 +135,7 @@ for file in toParse[:]:
     #SET HEADER
     #find header and copy it   
     theHeader = df[df[0] == 'First Name'].values[0]
-    print theHeader,'\n'
+    #print theHeader,'\n'
    
     #now remove the unused header    
     df = df[df[0] != 'First Name'] 
