@@ -52,7 +52,7 @@ Click the Execute SQL tab to open an interface to run SQL queries. In the app fo
 
 <br>
 
-![](http://www.onthemoveblog.com/web-apps/images/Top_Channel_Views_v2.jpg)
+![](http://www.onthemoveblog.com/web-apps/images/Top_Channel_Views_v3.jpg)
 
 ### Visualizing data
 
