@@ -28,7 +28,7 @@ toParse = [
     'KLRN_export_7_1_2017.zip'
 ]
 
-#this single override just updates the latest download 
+this single override just updates the latest download 
 toParse = [
     'KLRN_export_8_1_2017.zip'
 ]
@@ -237,7 +237,7 @@ for file in toParse[:]:
         ''' 
         
         #views table
-        id = start   
+        id = start #not using after all - auto incrementing instead   
         date_time = row['Date Watched']  
         date_seconds = row['Date Seconds']  
         time_watched = row['Time Watched']
@@ -245,9 +245,9 @@ for file in toParse[:]:
         
         cur.execute('''
             INSERT OR IGNORE INTO Views 
-            (id, members_uid, videos_media_id, date_time, date_seconds, time_watched, device) 
-            VALUES (?, NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, -1), NULLIF(?, ''))''', 
-            (id, uid, media_id, date_time, date_seconds, time_watched, device))
+            (members_uid, videos_media_id, date_time, date_seconds, time_watched, device) 
+            VALUES (NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, -1), NULLIF(?, ''))''', 
+            (uid, media_id, date_time, date_seconds, time_watched, device))
             
         #print id    
         #print date_time    
