@@ -29,10 +29,9 @@ def get_channel_views(date_start, date_end):
 
     return get_data_in_dataframe(query)
 
-def get_channel_views_members(date_start, date_end):
+def get_views_members(date_start, date_end):
     query = '''
         SELECT 
-          Videos.content_channel,
           Members.alleg_account_id,
           COUNT(Views.id) AS total_count
         FROM Views	
@@ -44,9 +43,27 @@ def get_channel_views_members(date_start, date_end):
         ORDER BY total_count DESC;
     '''.format(date_start, date_end)
 
+    return get_data_in_dataframe(query)
+    
+def get_channel_views_members(date_start, date_end, ids):
+    query = '''
+        SELECT 
+          Videos.content_channel,
+          Members.alleg_account_id,
+          COUNT(Views.id) AS total_count
+        FROM Views	
+        INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+        INNER JOIN Members ON Views.members_uid = Members.uid
+        WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
+        AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
+        AND Members.alleg_account_id IN ({})
+        GROUP BY Videos.content_channel
+        ORDER BY total_count DESC;
+    '''.format(date_start, date_end, ids)
+
     return get_data_in_dataframe(query)    
  
-def get_channel_episodes_views_members(date_start, date_end):
+def get_channel_episodes_views_members(date_start, date_end, ids):
     query = '''
         SELECT 
           Videos.content_channel,
@@ -58,8 +75,9 @@ def get_channel_episodes_views_members(date_start, date_end):
         INNER JOIN Members ON Views.members_uid = Members.uid
         WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
         AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
-        GROUP BY Members.alleg_account_id
+        AND Members.alleg_account_id IN ({})
+        GROUP BY Videos.title
         ORDER BY total_count DESC;
-    '''.format(date_start, date_end)
+    '''.format(date_start, date_end, ids)
 
     return get_data_in_dataframe(query)

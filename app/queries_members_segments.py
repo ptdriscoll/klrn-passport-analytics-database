@@ -3,7 +3,8 @@
 import os
 import numpy as np
 import pandas as pd
-from queries import get_channel_views_members
+from queries import get_views_members as get_pass
+from queries import get_channel_views_members as get_views
 from graphs import pie_chart 
 
 
@@ -53,15 +54,15 @@ print '\nTotal Members: ', '{:,}'.format(len(df_mem.id.unique()))
 
 
 '''
-get passport data
+get total passport viewers
 '''
 
-df_pass = get_channel_views_members(date_start, date_end)
+df_pass = get_pass(date_start, date_end)
 
 df_pass = df_pass.dropna()
 df_pass['alleg_account_id'] = df_pass['alleg_account_id'].astype(int) 
 df_pass = df_pass.sort_values('alleg_account_id', ascending=True)
-df_pass.columns = ['channel', 'id', 'count']
+df_pass.columns = ['id', 'count']
 print '\nTotal Passport Members: ', '{:,}'.format(len(df_pass.id.unique()))
 print 'Total Views',df_pass['count'].sum()
 #print '\n',df_pass.head(10)
@@ -87,9 +88,11 @@ df_sust = df_sust.drop_duplicates()
 df_sust = df_sust.set_index('id')
 #print '\nCHECK DEDUP:\n',df_sust.loc[[290825, 451922, 1237064, 1499961]]
 
-#merge with df_pass 
-df_sust = df_sust.join(df_pass, how='inner')
-df_sust = df_sust.drop('sustainer', axis=1)
+#run search based on segmented member ids
+df_sust_ids = df_sust.index.values.tolist()
+df_sust_ids = ','.join(str(x) for x in df_sust_ids)
+df_sust = get_views(date_start, date_end, df_sust_ids)
+df_sust.columns = ['channel', 'id', 'count']
 print '\n\nSUSTAINERS:', df_sust.shape
 print 'TOTAL VIEWS:', '{:,}'.format(df_sust['count'].sum())
 
@@ -124,10 +127,12 @@ df_first = df_first[df_first['first_donation'] == 'NEW']
 #print '\nDUPS IN DF_FIRST:',df_first.set_index('id').index.get_duplicates()
 df_first = df_first.set_index('id')
 
-#merge with df_pass 
-df_first = df_first.join(df_pass, how='inner')
-df_first = df_first.drop('first_donation', axis=1)
-print '\n\nFIRST YEARS:', df_first.shape
+#run search based on segmented member ids
+df_first_ids = df_first.index.values.tolist()
+df_first_ids = ','.join(str(x) for x in df_first_ids)
+df_first = get_views(date_start, date_end, df_first_ids)
+df_first.columns = ['channel', 'id', 'count']
+print '\n\nSUSTAINERS:', df_first.shape
 print 'TOTAL VIEWS:', '{:,}'.format(df_first['count'].sum())
 
 #sum and print 
@@ -168,10 +173,12 @@ df_major = df_major.drop_duplicates()
 df_major = df_major.set_index('id')
 #print '\nCHECK DEDUP:\n',df_major.loc[[116970, 134346, 150375, 154096]]
 
-#merge with df_pass 
-df_major = df_major.join(df_pass, how='inner')
-df_major = df_major.drop('major_donor', axis=1)
-print '\n\nMAJOR DONORS:', df_major.shape
+#run search based on segmented member ids
+df_major_ids = df_major.index.values.tolist()
+df_major_ids = ','.join(str(x) for x in df_major_ids)
+df_major = get_views(date_start, date_end, df_major_ids)
+df_major.columns = ['channel', 'id', 'count']
+print '\n\nSUSTAINERS:', df_major.shape
 print 'TOTAL VIEWS:', '{:,}'.format(df_major['count'].sum())
 
 #sum and print 

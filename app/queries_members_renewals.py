@@ -6,7 +6,8 @@ http://stackoverflow.com/questions/25788037/pandas-df-to-csvfile-csv-encode-utf-
 '''
 
 import pandas as pd
-from queries import get_channel_episodes_views_members as get_pass
+from queries import get_views_members as get_pass
+from queries import get_channel_episodes_views_members as get_views
 from graphs import pie_chart 
 
 
@@ -15,10 +16,10 @@ settings
 '''
 
 #where email working folder is
-root_folder = 'M:/FILES PATRICK/Alleg-Web/Emails/2017-07/'
+root_folder = 'M:/FILES PATRICK/Alleg-Web/Emails/2017-08/'
 
 #name of working file
-file = 'Lists/email renewals 7-14-17.xlsx'
+file = 'Lists/email renewals 8-14-17.xlsx'
 
 #where output files go
 output_folder = root_folder + 'Passport/'
@@ -28,8 +29,8 @@ date_start = '2016-04-01'
 date_end = '2017-07-31'
 
 #these are output identifiers
-output_tail = '2017_07'
-output_head = 'Top_Channel_Views'
+output_tail = '2017_08'
+output_head = 'Top_Views'
 
 title = 'Top Channel Views'
 
@@ -52,7 +53,7 @@ output = 'Total Members:  ' + '{:,}'.format(len(df_mem.id.unique()))
 
 
 '''
-get passport data
+get total passport viewers
 '''
 
 df_pass = get_pass(date_start, date_end)
@@ -60,7 +61,7 @@ df_pass = get_pass(date_start, date_end)
 df_pass = df_pass.dropna()
 df_pass['alleg_account_id'] = df_pass['alleg_account_id'].astype(int) 
 df_pass = df_pass.sort_values('alleg_account_id', ascending=True)
-df_pass.columns = ['channel', 'title', 'id', 'count']
+df_pass.columns = ['id', 'count']
 output += '\n\nTotal Passport Members:  ' + '{:,}'.format(len(df_pass.id.unique()))
 output += '\nTotal Views ' + '{:,}'.format(df_pass['count'].sum())
 #print '\n',df_pass.head(10)
@@ -72,7 +73,7 @@ df_pass = df_pass.set_index('id')
 
 
 '''
-merge member and passport data
+split members by passport viewers
 '''
 
 df = df_mem.copy()
@@ -90,26 +91,32 @@ output += '\n' + str(df_mem_notpass.shape)
 df_mem_pass.to_csv(output_folder + 'renewals_pass.csv', index=False, encoding='utf-8')
 df_mem_notpass.to_csv(output_folder + 'renewals_notpass.csv', index=False, encoding='utf-8')
 
-#now prepare to merge members list with df_pass for viewing stats
-#first clean dups
+
+'''
+get segmented channel and episode views 
+'''
+
+df = df_mem_pass.copy()
+
+#clean dups
 output += '\n\nDUPS IN df: ' + str(df.set_index('id').index.get_duplicates())
 df = df.drop_duplicates()
 df = df.set_index('id')
 cols = df.columns.tolist()
 #print '\nCHECK DEDUP:\n',df.loc[[290825, 451922, 1237064, 1499961]]
 
-#next merge members list with df_pass 
-df = df.join(df_pass, how='inner')
-df = df.drop(cols, axis=1)
-output += '\n\nPASSPORT MEMBERS: ' + str(df.shape[0]) + ' - or ' + '%.2f' % (100 * float(df.shape[0])/len(df_mem.id.unique())) + '%'
-output += '\nTOTAL VIEWS: ' + '{:,}'.format(df['count'].sum())
+#run search based on segmented member ids
+mem_pass_ids = df.index.values.tolist()
+mem_pass_ids = ','.join(str(x) for x in mem_pass_ids)
+df_views = get_views(date_start, date_end, mem_pass_ids)
+df_views.columns = ['channel', 'title', 'id', 'count']
 
 
 '''
-get top channel view 
+get top channel views 
 '''
 
-df_channels = df.copy()
+df_channels = df_views.copy()
 df_channels = df_channels.groupby(['channel'])[['count']].sum()
 df_channels = df_channels.sort_values('count', ascending=False)
 output += '\n\n\nTOP CHANNELS:\n' + df_channels.head(10).to_string()
@@ -121,7 +128,7 @@ df_channels.to_csv(output_folder + output_head + '_channels_' + output_tail + '.
 get top episode views
 '''
 
-df_episodes = df.copy()
+df_episodes = df_views.copy()
 df_episodes = df_episodes.groupby(['channel', 'title'])[['count']].sum()
 df_episodes = df_episodes.sort_values('count', ascending=False)
 df_episodes = df_episodes.reset_index(level='title')
