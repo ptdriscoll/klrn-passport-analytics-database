@@ -56,7 +56,7 @@ Click the Execute SQL tab to open an interface to run SQL queries. In the app fo
 
 ### Visualizing data
 
-To run visualizations, the Python library matplotlib must be installed.  
+To run visualizations, the Python library Matplotlib must be installed.  
 
 In the app folder, the file queries_views_channels.py will search top content channels by dates. Set the search dates under settings at the top of the file.
 
