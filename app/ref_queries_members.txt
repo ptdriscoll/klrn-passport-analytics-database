@@ -17,19 +17,34 @@ AND Views.date_time >= datetime('2016-04-01  00:00:00', 'localtime')
 AND Views.date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
 
 ======================================================================================
-Channel views per member id  
+Total views per member ids
+
+SELECT 
+  Members.alleg_account_id,
+  COUNT(Views.id) AS total_count
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-08-01 00:00:00', 'localtime')
+GROUP BY Members.alleg_account_id
+ORDER BY total_count DESC;
+
+======================================================================================
+Channel views per one or more member ids  
 
 SELECT 
   Videos.content_channel,
   Members.alleg_account_id,
-  COUNT(Views.id) AS views
+  COUNT(Views.id) AS total_count
 FROM Views	
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
-WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY Members.alleg_account_id
-ORDER BY views DESC;
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-08-01 00:00:00', 'localtime')
+AND Members.alleg_account_id IN (1743863)
+GROUP BY Videos.content_channel
+ORDER BY total_count DESC;
 
 ======================================================================================
 Episode views per member id  
@@ -38,11 +53,12 @@ SELECT
   Videos.content_channel,
   Videos.title,
   Members.alleg_account_id,
-  COUNT(Views.id) AS views
+  COUNT(Views.id) AS total_count
 FROM Views	
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
-WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY Members.alleg_account_id
-ORDER BY views DESC;
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-08-01 00:00:00', 'localtime')
+AND Members.alleg_account_id IN (1743863)
+GROUP BY Videos.title
+ORDER BY total_count DESC;
