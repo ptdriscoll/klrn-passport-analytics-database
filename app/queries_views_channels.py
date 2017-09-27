@@ -10,8 +10,10 @@ settings
 '''
 
 #SEARCH DATES
-date_start = '2017-07-01'
-date_end = '2017-07-31' 
+date_start = '2017-08-01'
+date_end = '2017-08-31'
+date_start = '2016-04-01'
+date_end = '2017-05-31' 
 
 title = 'Top Channel Views'
 

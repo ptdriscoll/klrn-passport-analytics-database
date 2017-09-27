@@ -17,6 +17,14 @@ AND Views.date_time >= datetime('2016-04-01  00:00:00', 'localtime')
 AND Views.date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
 
 ======================================================================================
+Get member ids Passport viewers
+
+SELECT DISTINCT alleg_account_id 
+FROM Members
+WHERE alleg_account_id IS NOT NULL
+ORDER BY alleg_account_id 
+
+======================================================================================
 Total views per member ids
 
 SELECT 
@@ -31,7 +39,7 @@ GROUP BY Members.alleg_account_id
 ORDER BY total_count DESC;
 
 ======================================================================================
-Channel views per one or more member ids  
+Channel views filtered by member id/s  
 
 SELECT 
   Videos.content_channel,
@@ -41,13 +49,28 @@ FROM Views
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
 WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-08-01 00:00:00', 'localtime')
-AND Members.alleg_account_id IN (1743863)
-GROUP BY Videos.content_channel
+AND Views.date_time <= datetime('2017-09-31 00:00:00', 'localtime')
+GROUP BY Videos.content_channel, Members.alleg_account_id
 ORDER BY total_count DESC;
 
 ======================================================================================
-Episode views per member id  
+Channel views filtered by member id/s  
+
+SELECT 
+  Videos.content_channel,
+  Members.alleg_account_id,
+  COUNT(Views.id) AS total_count
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-09-31 00:00:00', 'localtime')
+AND Members.alleg_account_id IN (1743863, 72751, 1757541)
+GROUP BY Videos.content_channel, Members.alleg_account_id 
+ORDER BY total_count DESC;  
+
+======================================================================================
+Episode views filtered by member id/s  
 
 SELECT 
   Videos.content_channel,
@@ -58,7 +81,7 @@ FROM Views
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
 WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-08-01 00:00:00', 'localtime')
-AND Members.alleg_account_id IN (1743863)
-GROUP BY Videos.title
-ORDER BY total_count DESC;
+AND Views.date_time <= datetime('2017-09-31 00:00:00', 'localtime')
+AND Members.alleg_account_id IN (1743863, 72751, 1757541)
+GROUP BY Videos.title, Members.alleg_account_id 
+ORDER BY total_count DESC; 

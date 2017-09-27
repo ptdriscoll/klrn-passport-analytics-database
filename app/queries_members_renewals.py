@@ -5,6 +5,7 @@ reference on byte order mark (BOM) for Windows in pd.to_csv
 http://stackoverflow.com/questions/25788037/pandas-df-to-csvfile-csv-encode-utf-8-still-gives-trash-characters-for-min
 '''
 
+import os
 import pandas as pd
 from queries import get_views_members as get_pass
 from queries import get_channel_episodes_views_members as get_views
@@ -16,23 +17,34 @@ settings
 '''
 
 #where email working folder is
-root_folder = 'M:/FILES PATRICK/Alleg-Web/Emails/2017-08/'
+root_folder = 'M:/FILES PATRICK/Alleg-Web/Emails/2017-09/'
 
 #name of working file
 file = 'Lists/email renewals 8-14-17.xlsx'
+file = 'Lists/Major Donor Renewals 8-14-17.xlsx'
+file = 'Lists/email renewal 9-15-17.xlsx'
+
 
 #where output files go
 output_folder = root_folder + 'Passport/'
 
 #MAKE SURE TO CHANGE SEARCH DATES
 date_start = '2016-04-01'
-date_end = '2017-07-31'
+date_end = '2017-09-07'
 
 #these are output identifiers
-output_tail = '2017_08'
+output_tail = '2017_09'
 output_head = 'Top_Views'
 
 title = 'Top Channel Views'
+
+
+'''
+create output folder if needed
+'''
+
+if not os.path.isdir(output_folder): 
+    os.mkdir(output_folder)
 
 
 '''
@@ -87,6 +99,8 @@ output += '\n\nCHECK SPLIT MEMBER LISTS:'
 output += '\n' + str(df.shape)
 output += '\n' + str(df_mem_pass.shape)
 output += '\n' + str(df_mem_notpass.shape)
+pass_percent = (float(df_mem_pass.shape[0]) / df.shape[0]) * 100
+output += '\nPassport viewers: {0:.0f}%'.format(pass_percent)
 
 df_mem_pass.to_csv(output_folder + 'renewals_pass.csv', index=False, encoding='utf-8')
 df_mem_notpass.to_csv(output_folder + 'renewals_notpass.csv', index=False, encoding='utf-8')

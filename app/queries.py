@@ -17,7 +17,8 @@ def get_data_in_dataframe(query):
 
 def get_channel_views(date_start, date_end):
     query = '''
-        SELECT Videos.content_channel, 
+        SELECT 
+          Videos.content_channel, 
           COUNT(Views.id) AS total_count
         FROM Videos	
         INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
@@ -57,7 +58,7 @@ def get_channel_views_members(date_start, date_end, ids):
         WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
         AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
         AND Members.alleg_account_id IN ({})
-        GROUP BY Videos.content_channel
+        GROUP BY Videos.content_channel, Members.alleg_account_id
         ORDER BY total_count DESC;
     '''.format(date_start, date_end, ids)
 
@@ -76,7 +77,7 @@ def get_channel_episodes_views_members(date_start, date_end, ids):
         WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
         AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
         AND Members.alleg_account_id IN ({})
-        GROUP BY Videos.title
+        GROUP BY Videos.title, Members.alleg_account_id
         ORDER BY total_count DESC;
     '''.format(date_start, date_end, ids)
 

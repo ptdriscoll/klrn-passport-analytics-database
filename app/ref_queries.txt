@@ -19,40 +19,44 @@ Average number of views per week
 
 SELECT ROUND(CAST(AVG(views) AS REAL), 1) AS weekly_average_views
 FROM (
-  SELECT strftime('%W', datetime(date_seconds, 'unixepoch', 'localtime')) AS weeks,
+  SELECT 
+    strftime('%W', datetime(date_seconds, 'unixepoch', 'localtime')) AS weeks,
     COUNT(id) AS views
   FROM Views
-  WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-  AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')   
+  WHERE date_time >= datetime('2017-07-30 00:00:00', 'localtime')
+  AND date_time <= datetime('2017-09-23 00:00:00', 'localtime') 
   GROUP BY weeks
 );
 
 ======================================================================================
 Number of views week by week 
 
-SELECT strftime('%W', datetime(date_seconds, 'unixepoch', 'localtime')) AS week,
+SELECT 
+  strftime('%W', datetime(date_seconds, 'unixepoch', 'localtime')) AS week,
   COUNT(id) AS views
 FROM Views
-WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')  
+  WHERE date_time >= datetime('2017-07-30 00:00:00', 'localtime')
+  AND date_time <= datetime('2017-09-23 00:00:00', 'localtime') 
 GROUP BY week
-ORDER BY CAST(views AS INTEGER) DESC;
+ORDER BY week, CAST(views AS INTEGER) DESC;
 
 ======================================================================================
 Number of views day by day
 
-SELECT strftime('%w', date_time) AS day, 
+SELECT 
+  strftime('%w', date_time) AS day, 
   COUNT(id) AS views 
 FROM Views
-WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY strftime('%w', date_time)
-ORDER BY CAST(views AS INTEGER) DESC;
+WHERE date_time >= datetime('2017-07-30 00:00:00', 'localtime')
+AND date_time <= datetime('2017-09-23 00:00:00', 'localtime') 
+GROUP BY day
+ORDER BY day, CAST(views AS INTEGER) DESC;
 
 ======================================================================================
 Number of views day by day, in readable format
 
-SELECT CASE CAST(strftime('%w', date_time) AS INTEGER)
+SELECT 
+  CASE CAST(strftime('%w', date_time) AS INTEGER)
     when 0 then 'Sunday'
     when 1 then 'Monday'
     when 2 then 'Tuesday'
@@ -62,26 +66,28 @@ SELECT CASE CAST(strftime('%w', date_time) AS INTEGER)
     else 'Saturday' end AS day,
   COUNT(id) AS views 
 FROM Views
-WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY strftime('%w', date_time)
-ORDER BY CAST(views AS INTEGER) DESC;
+WHERE date_time >= datetime('2017-07-30 00:00:00', 'localtime')
+AND date_time <= datetime('2017-09-23 00:00:00', 'localtime') 
+GROUP BY day
+ORDER BY strftime('%w', date_time), CAST(views AS INTEGER) DESC;
 
 ======================================================================================
 Number of views hour by hour 
 
-SELECT strftime('%H', datetime(date_time, 'localtime')) AS hour, 
+SELECT 
+  strftime('%H', datetime(date_time, 'localtime')) AS hour, 
   COUNT(id) AS views 
 FROM Views
 WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
 AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')
 GROUP BY hour
-ORDER BY CAST(views AS INTEGER) DESC;
+ORDER BY hour, CAST(views AS INTEGER) DESC;
 
 ======================================================================================
-Number of views hour by hour, sorted by frequency, and in readable format 
+Number of views hour by hour, sorted by hour or frequency, and in readable format 
 
-SELECT  CASE CAST(strftime('%H', datetime(date_time, 'localtime')) AS INTEGER) 
+SELECT 
+  CASE CAST(strftime('%H', datetime(date_time, 'localtime')) AS INTEGER) 
     when 0 then '12 am'
     when 1 then '1 am'
     when 2 then '2 am'
@@ -111,10 +117,10 @@ FROM Views
 WHERE date_time >= datetime('2017-07-01 00:00:00', 'localtime')
 AND date_time <= datetime('2017-07-28 00:00:00', 'localtime')
 GROUP BY hour
-ORDER BY CAST(views AS INTEGER) DESC;
+ORDER BY strftime('%H', datetime(date_time, 'localtime')), CAST(views AS INTEGER) DESC;
 
 ======================================================================================
-Number of views hour by hour, sorted by hour, and in readable format 
+Another version of number of views hour by hour, sorted by hour, and in readable format 
 
 SELECT  
 	strftime('%H', datetime(date_time, 'localtime')) AS int_hour,
@@ -153,7 +159,8 @@ ORDER BY int_hour;
 ======================================================================================
 Most popular channels
 
-SELECT Videos.content_channel, 
+SELECT 
+  Videos.content_channel, 
   COUNT(Views.id) AS views
 FROM Videos	
 INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
@@ -165,11 +172,13 @@ ORDER BY views DESC;
 ======================================================================================
 Most popular episodes
 
-SELECT Videos.media_id, Videos.content_channel, Videos.title, 
+SELECT 
+  Videos.content_channel, 
+  Videos.title, 
   COUNT(Views.id) AS views
 FROM Videos	
 INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
 WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
 AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY Videos.media_id
+GROUP BY Videos.title
 ORDER BY views DESC;
