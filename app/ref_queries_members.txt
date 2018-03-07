@@ -3,8 +3,8 @@ Total Passport members watching
 
 SELECT COUNT(DISTINCT members_uid) AS total_members
 FROM Views
-WHERE date_time >= datetime('2016-04-01  00:00:00', 'localtime')
-AND date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
+WHERE date_time >= datetime('2016-10-01  00:00:00', 'localtime')
+AND date_time <= datetime('2017-09-30  00:00:00', 'localtime'); 
 
 ======================================================================================
 Total members watching, with identifiable member ids, (but subtract 1 NULL from total)
@@ -85,3 +85,21 @@ AND Views.date_time <= datetime('2017-09-31 00:00:00', 'localtime')
 AND Members.alleg_account_id IN (1743863, 72751, 1757541)
 GROUP BY Videos.title, Members.alleg_account_id 
 ORDER BY total_count DESC; 
+
+======================================================================================
+Episode viewing amounts and video lengths per member id  
+
+SELECT 
+  Videos.content_channel,
+  Videos.title,
+  Members.alleg_account_id,
+  Videos.video_length,
+  SUM(Views.time_watched) AS time_watched,
+  SUM(CAST(Views.time_watched AS REAL)/Videos.video_length) AS percent_watched
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2017-12-02 00:00:00', 'localtime')
+GROUP BY Videos.title, Members.alleg_account_id 
+ORDER BY Members.alleg_account_id DESC; 

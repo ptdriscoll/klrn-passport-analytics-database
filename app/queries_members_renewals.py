@@ -13,30 +13,45 @@ from graphs import pie_chart
 
 
 '''
-settings
+manual settings
+'''
+
+#stats to run = reg' or 'maj'
+to_run = 'reg'
+
+#name of working file
+file_regular = 'Lists/' + 'email renewal 2-14-18.xlsx'
+file_major = 'Lists/' + 'MD Renewal Email List.xlsx'
+
+#these are output identifiers
+output_dir = '2018-02'
+
+#MAKE SURE TO CHANGE SEARCH DATES
+date_start = '2016-04-01'
+date_end = '2018-02-01'
+
+
+'''
+auto settings
 '''
 
 #where email working folder is
-root_folder = 'M:/FILES PATRICK/Alleg-Web/Emails/2017-09/'
+root_folder = 'Z:/Public Relations/FILES PATRICK/Alleg-Web/Emails/' + output_dir + '/'
 
-#name of working file
-file = 'Lists/email renewals 8-14-17.xlsx'
-file = 'Lists/Major Donor Renewals 8-14-17.xlsx'
-file = 'Lists/email renewal 9-15-17.xlsx'
+if to_run == 'reg': 
+    f = file_regular
+    output_head = 'Top_Views_Renewals'
+    title = 'Top Views - Renewals'
 
+if to_run == 'maj':
+    f = file_major
+    output_head = 'Top_Views_Major'
+    title = 'Top Views - Major Renewals'
 
 #where output files go
 output_folder = root_folder + 'Passport/'
 
-#MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2016-04-01'
-date_end = '2017-09-07'
-
-#these are output identifiers
-output_tail = '2017_09'
-output_head = 'Top_Views'
-
-title = 'Top Channel Views'
+output_tail = output_dir.replace('-', '_')
 
 
 '''
@@ -51,7 +66,7 @@ if not os.path.isdir(output_folder):
 get members data
 '''
 
-df_mem = pd.read_excel(root_folder + file)
+df_mem = pd.read_excel(root_folder + f)
 df_mem = df_mem.rename(columns = lambda x: x.strip())
 #print '\n', df_mem.head(10)
 
@@ -102,8 +117,8 @@ output += '\n' + str(df_mem_notpass.shape)
 pass_percent = (float(df_mem_pass.shape[0]) / df.shape[0]) * 100
 output += '\nPassport viewers: {0:.0f}%'.format(pass_percent)
 
-df_mem_pass.to_csv(output_folder + 'renewals_pass.csv', index=False, encoding='utf-8')
-df_mem_notpass.to_csv(output_folder + 'renewals_notpass.csv', index=False, encoding='utf-8')
+df_mem_pass.to_csv(output_folder + output_head + '_pass.csv', index=False, encoding='utf-8')
+df_mem_notpass.to_csv(output_folder + output_head + '_notpass.csv', index=False, encoding='utf-8')
 
 
 '''
@@ -151,14 +166,14 @@ output += '\n\n\nTOP EPISODES (SHOW CHANNELS)\n' + df_episodes.drop('title', axi
 
 df_episodes.to_csv(output_folder + output_head + '_episodes_' + output_tail + '.csv', encoding='utf-8-sig')
 
-with open(output_folder + output_head + '_episodes_' + output_tail + '.txt', 'w') as of:  
+with open(output_folder + output_head + output_tail + '.txt', 'w') as of:  
     of.write(output.encode('utf-8'))
  
 print '\n', output
 
 #plot image of top channels   
 inputf = df_channels.reset_index()      
-outputf = output_folder + output_head + '.jpg'
+outputf = output_folder + output_head + '.png'
 print outputf
 include_others = True
 

@@ -17,7 +17,7 @@ settings
 #prepare list of files for processing
 #these files must be in a folder called downloads
 
-#multiple files can be listed - important to seed start
+#multiple files can be listed - which is important to seed start
 toParse = [
     'KLRN_export_1_5_2017_all.zip',
     'KLRN_export_2_1_2017.zip',
@@ -25,13 +25,15 @@ toParse = [
     'KLRN_export_4_1_2017.zip',
     'KLRN_export_5_1_2017.zip',
     'KLRN_export_6_1_2017.zip',
-    'KLRN_export_7_1_2017.zip'
-]
-
-#this single override just updates the latest download 
-toParse = [
+    'KLRN_export_7_1_2017.zip',
+    'KLRN_export_8_1_2017.zip',    
     'KLRN_export_9_1_2017.zip',
     'KLRN_export_9_7_2017.zip'
+]
+
+#this single override just updates the latest download/s 
+toParse = [
+    'KLRN_export_2_1_2018.zip'
 ]
 
 

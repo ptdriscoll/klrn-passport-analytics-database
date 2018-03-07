@@ -16,7 +16,8 @@ settings
 #for example, use this naming scheme, members_2017-05-31
 #also make sure excel input file is in members folder
 date_start = '2016-04-01'
-date_end = '2017-05-31'
+date_start = '2017-10-01'
+date_end = '2017-10-31'
 
 
 '''

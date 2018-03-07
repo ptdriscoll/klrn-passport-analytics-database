@@ -10,10 +10,9 @@ settings
 '''
 
 #SEARCH DATES
-date_start = '2017-08-01'
-date_end = '2017-08-31'
 date_start = '2016-04-01'
-date_end = '2017-05-31' 
+date_start = '2018-01-01'
+date_end = '2018-01-31'
 
 title = 'Top Channel Views'
 
@@ -44,7 +43,7 @@ print '\nTOTAL VIEWS', df['total_count'].sum()
 
 #plot results    
 inputf = df      
-outputf = os.path.join(root_graphics, output_head + '.jpg')
+outputf = os.path.join(root_graphics, output_head + '.png')
 include_others = True
 
 pie_chart(inputf, outputf, title, include_others)
