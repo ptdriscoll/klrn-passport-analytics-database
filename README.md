@@ -52,7 +52,7 @@ Click the Execute SQL tab to open an interface to run SQL queries. In the app fo
 
 <br>
 
-![](images/Top_Channel_Views_pie.png.jpg)
+![](images/Top_Channel_Views_pie.jpg)
 
 ### Visualizing data
 
@@ -64,7 +64,7 @@ Running the file will create an output_tables folder with a csv file of the resu
 
 <br>
 
-![](images/Top_Channel_Views_bar.png.jpg)
+![](images/Top_Channel_Views_bar.png)
 
 ### Cross-referencing membership data 
 
