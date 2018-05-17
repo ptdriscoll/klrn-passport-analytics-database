@@ -64,7 +64,7 @@ Running the file will create an output_tables folder with a csv file of the resu
 
 <br>
 
-![](images/Top_Channel_Views_bar.png){width: 66%}
+<img src="images/Top_Channel_Views_bar.png" width="200" />
 
 ### Cross-referencing membership data 
 
