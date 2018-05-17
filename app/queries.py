@@ -30,6 +30,26 @@ def get_channel_views(date_start, date_end):
 
     return get_data_in_dataframe(query)
 
+#this includes devices
+def get_channel_views_devices(date_start, date_end):
+    query = '''
+        SELECT 
+          Videos.content_channel,
+          Members.alleg_account_id,
+          Views.device,
+          COUNT(Views.id) AS total_count,
+          SUM(Views.time_watched) AS time_watched
+        FROM Views	
+        INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+        INNER JOIN Members ON Views.members_uid = Members.uid
+        WHERE Views.date_time >= datetime('{}', 'localtime')
+        AND Views.date_time <= datetime('{}', 'localtime')
+        GROUP BY Videos.content_channel, Members.alleg_account_id, Views.device
+        ORDER BY total_count DESC;
+    '''.format(date_start, date_end) 
+
+    return get_data_in_dataframe(query)
+
 def get_views_members(date_start, date_end):
     query = '''
         SELECT 
@@ -77,7 +97,7 @@ def get_channel_episodes_views_members(date_start, date_end, ids):
         WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
         AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
         AND Members.alleg_account_id IN ({})
-        GROUP BY Videos.title, Members.alleg_account_id
+        GROUP BY Videos.content_channel, Videos.title, Members.alleg_account_id
         ORDER BY total_count DESC;
     '''.format(date_start, date_end, ids)
 

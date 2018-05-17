@@ -3,8 +3,8 @@ Total Passport members watching
 
 SELECT COUNT(DISTINCT members_uid) AS total_members
 FROM Views
-WHERE date_time >= datetime('2016-10-01  00:00:00', 'localtime')
-AND date_time <= datetime('2017-09-30  00:00:00', 'localtime'); 
+WHERE date_time >= datetime('2018-01-01  00:00:00', 'localtime')
+AND date_time <= datetime('2018-02-20  00:00:00', 'localtime'); 
 
 ======================================================================================
 Total members watching, with identifiable member ids, (but subtract 1 NULL from total)

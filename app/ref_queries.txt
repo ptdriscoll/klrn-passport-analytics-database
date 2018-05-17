@@ -180,5 +180,5 @@ FROM Videos
 INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
 WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
 AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
-GROUP BY Videos.title
+GROUP BY Videos.content_channel, Videos.title
 ORDER BY views DESC;

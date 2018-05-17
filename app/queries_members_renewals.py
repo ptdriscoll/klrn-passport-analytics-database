@@ -20,15 +20,15 @@ manual settings
 to_run = 'reg'
 
 #name of working file
-file_regular = 'Lists/' + 'email renewal 2-14-18.xlsx'
-file_major = 'Lists/' + 'MD Renewal Email List.xlsx'
+file_regular = 'Lists/' + 'Email renewal list 4-13-18.xlsx'
+#file_major = 'Lists/' + '03 18 MD Renewal Email List.xlsx'
 
 #these are output identifiers
-output_dir = '2018-02'
+output_dir = '2018-04'
 
 #MAKE SURE TO CHANGE SEARCH DATES
 date_start = '2016-04-01'
-date_end = '2018-02-01'
+date_end = '2018-04-01'
 
 
 '''
@@ -122,7 +122,7 @@ df_mem_notpass.to_csv(output_folder + output_head + '_notpass.csv', index=False,
 
 
 '''
-get segmented channel and episode views 
+get segmented channel and episode viewers 
 '''
 
 df = df_mem_pass.copy()

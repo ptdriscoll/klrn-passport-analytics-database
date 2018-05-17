@@ -52,7 +52,7 @@ Click the Execute SQL tab to open an interface to run SQL queries. In the app fo
 
 <br>
 
-![](http://www.onthemoveblog.com/web-apps/images/Top_Channel_Views_v3.jpg)
+![](images/Top_Channel_Views_pie.png.jpg)
 
 ### Visualizing data
 
@@ -61,6 +61,10 @@ To run visualizations, the Python library Matplotlib must be installed.
 In the app folder, the file queries_views_channels.py will search top content channels by dates. Set the search dates under settings at the top of the file.
 
 Running the file will create an output_tables folder with a csv file of the results, and an output_graphics folder with a pie-chart of the top five channels.
+
+<br>
+
+![](images/Top_Channel_Views_bar.png.jpg)
 
 ### Cross-referencing membership data 
 
