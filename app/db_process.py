@@ -33,7 +33,7 @@ toParse = [
 
 #this single override just updates the latest download/s 
 toParse = [
-    'KLRN_export_5_1_2018.zip'
+    'KLRN_export_7_1_2018.zip'
 ]
 
 

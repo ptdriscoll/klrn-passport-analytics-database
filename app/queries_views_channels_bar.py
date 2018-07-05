@@ -5,6 +5,7 @@ from queries import get_channel_views_devices as get_views
 import sys
 sys.path.insert(0, '\\\\alleg\\General\\Public Relations\\ONLINE\\Passport\\STATS')
 
+from helpers import normalize_shows
 from Allegiance.helpers import clean_passport_views as clean_views
 from Allegiance.helpers import set_aggregate
 from Allegiance.helpers import prep_one_bar_horiz as plot
@@ -16,8 +17,8 @@ settings
 
 #SEARCH DATES
 date_start = '2016-04-01'
-date_start = '2018-04-01'
-date_end = '2018-05-01'
+date_start = '2018-06-01'
+date_end = '2018-07-01'
 
 title = 'Top Channel Views'
 
@@ -40,6 +41,7 @@ process
 '''
 
 df = get_views(date_start, date_end)
+df = normalize_shows(df, 'content_channel')
 df = clean_views(df)
 cols, plot_devices, aggreg_clust = set_aggregate(df, include_age=False)
 
@@ -61,3 +63,6 @@ print '\n', df.head(10)
 
 image = output_head = title.replace(' ', '_') + '.png'
 plot(df, title, root_graphics, image, plot_devices=True)
+
+
+

@@ -18,17 +18,18 @@ manual settings
 
 #stats to run = reg' or 'maj'
 to_run = 'reg'
+to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists/' + 'Email renewal list 4-13-18.xlsx'
-#file_major = 'Lists/' + '03 18 MD Renewal Email List.xlsx'
+file_regular = 'Lists/' + 'email renewals 6-13-18.xlsx'
+file_major = 'Lists/' + '0618 MD Email Renewals.xlsx'
 
 #these are output identifiers
-output_dir = '2018-04'
+output_dir = '2018-06'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2016-04-01'
-date_end = '2018-04-01'
+date_start = '2017-06-01'
+date_end = '2018-06-01'
 
 
 '''
