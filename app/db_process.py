@@ -18,22 +18,8 @@ settings
 #these files must be in a folder called downloads
 
 #multiple files can be listed - which is important to seed start
-toParse = [
-    'KLRN_export_1_5_2017_all.zip',
-    'KLRN_export_2_1_2017.zip',
-    'KLRN_export_3_1_2017.zip',
-    'KLRN_export_4_1_2017.zip',
-    'KLRN_export_5_1_2017.zip',
-    'KLRN_export_6_1_2017.zip',
-    'KLRN_export_7_1_2017.zip',
-    'KLRN_export_8_1_2017.zip',    
-    'KLRN_export_9_1_2017.zip',
-    'KLRN_export_9_7_2017.zip'
-]
-
-#this single override just updates the latest download/s 
-toParse = [
-    'KLRN_export_7_1_2018.zip'
+toParse = [  
+    'KLRN_export_2_1_2019.zip'
 ]
 
 
@@ -200,10 +186,19 @@ for file in toParse[:]:
         if first_name == np.NaN: check.append(first_name)
         
         cur.execute('''
-            INSERT OR IGNORE INTO Members 
+            INSERT INTO Members 
             (uid, membership_id, alleg_account_id, first_name, last_name, email) 
-            VALUES (?, NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, ''), NULLIF(?, ''), NULLIF(?, ''))''', 
-            (uid, membership_id, alleg_account_id, first_name, last_name, email))
+              VALUES (:uid, NULLIF(:membership_id, ''), NULLIF(:alleg_account_id, -1), 
+              NULLIF(:first_name, ''), NULLIF(:last_name, ''), NULLIF(:email, ''))
+                ON CONFLICT(uid) DO UPDATE SET 
+                  membership_id=NULLIF(:membership_id, ''), 
+                  alleg_account_id=NULLIF(:alleg_account_id, -1), 
+                  first_name=NULLIF(:first_name, ''), 
+                  last_name=NULLIF(:last_name, ''), 
+                  email=NULLIF(:email, '')   
+            ''', 
+            {'uid': uid, 'membership_id': membership_id, 'alleg_account_id': alleg_account_id, 
+             'first_name': first_name, 'last_name': last_name, 'email': email})
         
         #print first_name, last_name        
         
@@ -224,10 +219,16 @@ for file in toParse[:]:
         video_length = row['Total Run Time of the video']
         
         cur.execute('''
-            INSERT OR IGNORE INTO Videos 
+            INSERT INTO Videos 
             (media_id, title, content_channel, video_length) 
-            VALUES (?, NULLIF(?, ''), NULLIF(?, ''), NULLIF(?, -1))''', 
-            (media_id, title, content_channel, video_length))
+              VALUES (:media_id, NULLIF(:title, ''), NULLIF(:content_channel, ''), NULLIF(:video_length, -1))
+                ON CONFLICT(media_id) DO UPDATE SET
+                  title=NULLIF(:title, ''), 
+                  content_channel=NULLIF(:content_channel, ''), 
+                  video_length=NULLIF(:video_length, -1)
+            ''', 
+            {'media_id': media_id, 'title': title, 'content_channel': content_channel, 
+             'video_length': video_length}) 
             
         #print title    
         

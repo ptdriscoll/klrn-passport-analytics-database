@@ -17,8 +17,12 @@ settings
 
 #SEARCH DATES
 date_start = '2016-04-01'
-date_start = '2018-06-01'
-date_end = '2018-07-01'
+date_start = '2018-12-01'
+date_end = '2019-01-01'
+
+date_start = '2019-01-01'
+date_start = '2016-04-01'
+date_end = '2019-02-01'
 
 title = 'Top Channel Views'
 
@@ -56,7 +60,7 @@ df = df.groupby('show').agg(aggreg_clust)
 df = df.sort_values(by=sort_by, ascending=False)
 df = df[cols]
 
-print '\n', df.head(10)
+print '\n', df.head(20)
 #print '\n',cols
 #print plot_devices
 #print aggreg_clust

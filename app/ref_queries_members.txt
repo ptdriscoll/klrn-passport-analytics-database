@@ -3,8 +3,8 @@ Total Passport members watching
 
 SELECT COUNT(DISTINCT members_uid) AS total_members
 FROM Views
-WHERE date_time >= datetime('2018-01-01  00:00:00', 'localtime')
-AND date_time <= datetime('2018-02-20  00:00:00', 'localtime'); 
+WHERE date_time >= datetime('2018-12-01  00:00:00', 'localtime')
+AND date_time <= datetime('2018-12-31  00:00:00', 'localtime'); 
 
 ======================================================================================
 Total members watching, with identifiable member ids, (but subtract 1 NULL from total)
@@ -13,8 +13,18 @@ SELECT COUNT(DISTINCT Members.alleg_account_id) AS total_members_with_ids
 FROM Members
 INNER JOIN Views ON Members.uid = Views.members_uid
 WHERE Members.alleg_account_id IS NOT NULL
-AND Views.date_time >= datetime('2016-04-01  00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-08-01  00:00:00', 'localtime'); 
+AND Views.date_time >= datetime('2018-06-01  00:00:00', 'localtime')
+AND Views.date_time <= datetime('2018-06-30  00:00:00', 'localtime'); 
+
+======================================================================================
+Total members watching, based on identifiable emails
+
+SELECT COUNT(DISTINCT Members.email) AS total_members_with_emails
+FROM Members
+INNER JOIN Views ON Members.uid = Views.members_uid
+WHERE Members.email IS NOT NULL
+AND Views.date_time >= datetime('2018-06-01  00:00:00', 'localtime')
+AND Views.date_time <= datetime('2018-06-30  00:00:00', 'localtime'); 
 
 ======================================================================================
 Get member ids Passport viewers

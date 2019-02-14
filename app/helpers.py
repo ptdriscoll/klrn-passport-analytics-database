@@ -21,7 +21,7 @@ def normalize_shows(df, col, regroup=False, col_sort='total_count'):
     return df
 
 '''
-validattion helpers
+validation helpers
 '''
 
 #precompiled regexes

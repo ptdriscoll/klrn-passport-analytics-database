@@ -18,18 +18,19 @@ manual settings
 
 #stats to run = reg' or 'maj'
 to_run = 'reg'
-to_run = 'maj'
+#to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists/' + 'email renewals 6-13-18.xlsx'
-file_major = 'Lists/' + '0618 MD Email Renewals.xlsx'
+file_regular = 'Lists/' + 'email renewals 1-16-19.xlsx'
+file_major = 'Lists/' + '.xlsx'
 
 #these are output identifiers
-output_dir = '2018-06'
+output_dir = '2019-01'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2017-06-01'
-date_end = '2018-06-01'
+date_start = '2018-12-01'
+#date_start = '2018-06-01'
+date_end = '2019-01-01'
 
 
 '''
@@ -37,7 +38,7 @@ auto settings
 '''
 
 #where email working folder is
-root_folder = 'Z:/Public Relations/FILES PATRICK/Alleg-Web/Emails/' + output_dir + '/'
+root_folder = '\\\\ALLEG\\General\\Public Relations\\FILES PATRICK\\Alleg-Web\\Emails\\' + output_dir + '/'
 
 if to_run == 'reg': 
     f = file_regular
@@ -90,7 +91,7 @@ df_pass = df_pass.dropna()
 df_pass['alleg_account_id'] = df_pass['alleg_account_id'].astype(int) 
 df_pass = df_pass.sort_values('alleg_account_id', ascending=True)
 df_pass.columns = ['id', 'count']
-output += '\n\nTotal Passport Members:  ' + '{:,}'.format(len(df_pass.id.unique()))
+output += '\n\nTotal Passport Viewers:  ' + '{:,}'.format(len(df_pass.id.unique()))
 output += '\nTotal Views ' + '{:,}'.format(df_pass['count'].sum())
 #print '\n',df_pass.head(10)
 

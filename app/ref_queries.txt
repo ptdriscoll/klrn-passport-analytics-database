@@ -4,15 +4,15 @@ Total unique videos
 SELECT COUNT(DISTINCT videos_media_id) AS total_unique_videos 
 FROM Views
 WHERE date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-AND date_time <= datetime('2017-08-01 00:00:00', 'localtime');  
+AND date_time <= datetime('2019-01-01 00:00:00', 'localtime');  
 
 ======================================================================================
 Total views
 
 SELECT COUNT(id) AS total_view
 FROM Views
-WHERE date_time >= datetime('2016-10-01 00:00:00', 'localtime')
-AND date_time <= datetime('2017-09-30  00:00:00', 'localtime');   
+WHERE date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND date_time <= datetime('2019-01-01 00:00:00', 'localtime');   
 
 ======================================================================================
 Average number of views per week 
@@ -164,8 +164,8 @@ SELECT
   COUNT(Views.id) AS views
 FROM Videos	
 INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
-WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2019-01-01 00:00:00', 'localtime')
 GROUP BY Videos.content_channel
 ORDER BY views DESC;
 
@@ -178,7 +178,7 @@ SELECT
   COUNT(Views.id) AS views
 FROM Videos	
 INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
-WHERE Views.date_time >= datetime('2017-07-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-07-28 00:00:00', 'localtime')
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2019-01-01 00:00:00', 'localtime')
 GROUP BY Videos.content_channel, Videos.title
 ORDER BY views DESC;
