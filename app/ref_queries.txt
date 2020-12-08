@@ -11,8 +11,8 @@ Total views
 
 SELECT COUNT(id) AS total_view
 FROM Views
-WHERE date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-AND date_time <= datetime('2019-01-01 00:00:00', 'localtime');   
+WHERE date_time >= datetime('2019-09-01 00:00:00', 'localtime')
+AND date_time < datetime('2019-10-01 00:00:00', 'localtime');  
 
 ======================================================================================
 Average number of views per week 
@@ -170,6 +170,20 @@ GROUP BY Videos.content_channel
 ORDER BY views DESC;
 
 ======================================================================================
+Unique viewers per channel
+
+SELECT 
+  Videos.content_channel, 
+  COUNT(DISTINCT(Members.uid)) AS viewers
+FROM Videos	
+INNER JOIN Members ON Members.uid = Views.members_uid 
+INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
+WHERE Views.date_time >= datetime('2020-10-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2020-11-01 00:00:00', 'localtime')
+GROUP BY Videos.content_channel
+ORDER BY viewers DESC;
+
+======================================================================================
 Most popular episodes
 
 SELECT 
@@ -182,3 +196,30 @@ WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
 AND Views.date_time <= datetime('2019-01-01 00:00:00', 'localtime')
 GROUP BY Videos.content_channel, Videos.title
 ORDER BY views DESC;
+
+======================================================================================
+Specific channel
+
+SELECT 
+  Videos.content_channel, 
+  COUNT(Views.id) AS views
+FROM Videos	
+INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
+WHERE Views.date_time >= datetime('2018-04-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2019-04-01 00:00:00', 'localtime')
+AND Videos.content_channel LIKE '%Nature%'
+GROUP BY Videos.content_channel
+
+======================================================================================
+Specific channel and episodes
+
+SELECT 
+  Videos.content_channel, 
+  Videos.title,
+  COUNT(Views.id) AS views
+FROM Videos	
+INNER JOIN Views ON Videos.media_id = Views.videos_media_id 
+WHERE Views.date_time >= datetime('2019-11-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2019-12-01 00:00:00', 'localtime')
+AND Videos.content_channel LIKE '%Great Performances%'
+GROUP BY Videos.content_channel, Videos.title

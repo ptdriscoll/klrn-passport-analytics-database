@@ -59,12 +59,12 @@ FROM Views
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
 WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-AND Views.date_time <= datetime('2017-09-31 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2019-06-01 00:00:00', 'localtime')
 GROUP BY Videos.content_channel, Members.alleg_account_id
 ORDER BY total_count DESC;
 
 ======================================================================================
-Channel views filtered by member id/s  
+Channel views filtered by specific member id/s  
 
 SELECT 
   Videos.content_channel,
@@ -80,7 +80,63 @@ GROUP BY Videos.content_channel, Members.alleg_account_id
 ORDER BY total_count DESC;  
 
 ======================================================================================
-Episode views filtered by member id/s  
+Most popular first channels watched by new members
+
+http://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
+
+
+SELECT 
+  Videos.content_channel,
+  COUNT(Views.id) AS total_count,
+  ROW_NUMBER() OVER (
+    PARTITION BY Members.uid
+    ORDER BY Views.date_time
+  ) AS row_number  
+FROM Views		
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2019-06-01 00:00:00', 'localtime')
+GROUP BY Videos.content_channel
+ORDER BY row_number, total_count DESC;
+
+======================================================================================
+Most popular first channels watched, filtered by time period new members acquired 
+
+First get all unique member ids before Oct. 1
+
+SELECT DISTINCT(Members.uid) AS id
+FROM Members
+INNER JOIN Views ON Members.uid = Views.members_uid 
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2020-10-01 00:00:00', 'localtime')
+ORDER BY id 
+
+http://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
+
+SELECT 
+  Videos.content_channel,
+  COUNT(Views.id) AS total_count,
+  ROW_NUMBER() OVER (
+    PARTITION BY Members.uid
+    ORDER BY Views.date_time
+  ) AS row_number  
+FROM Views		
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2020-10-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2020-11-01 00:00:00', 'localtime')
+AND Members.uid NOT IN (
+	SELECT DISTINCT(Members.uid) AS id
+	FROM Members
+	INNER JOIN Views ON Members.uid = Views.members_uid 
+	WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+	AND Views.date_time < datetime('2020-10-01 00:00:00', 'localtime')) 
+GROUP BY Videos.content_channel
+ORDER BY row_number, total_count DESC;
+
+======================================================================================
+Episode views filtered by specific member id/s  
 
 SELECT 
   Videos.content_channel,

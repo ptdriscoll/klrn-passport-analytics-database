@@ -3,7 +3,7 @@
 import os
 from queries import get_channel_views_devices as get_views
 import sys
-sys.path.insert(0, '\\\\alleg\\General\\Public Relations\\ONLINE\\Passport\\STATS')
+sys.path.insert(0, 'T:\\Public Relations\\ONLINE\\Passport\\STATS')
 
 from helpers import normalize_shows
 from Allegiance.helpers import clean_passport_views as clean_views
@@ -16,13 +16,10 @@ settings
 '''
 
 #SEARCH DATES
-date_start = '2016-04-01'
-date_start = '2018-12-01'
-date_end = '2019-01-01'
+date_start = '2016-04-01' #date Passport started
 
-date_start = '2019-01-01'
-date_start = '2016-04-01'
-date_end = '2019-02-01'
+date_start = '2020-11-01'
+date_end = '2020-12-01'
 
 title = 'Top Channel Views'
 

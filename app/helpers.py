@@ -11,7 +11,6 @@ data cleaners
 
 #normalize show name inconsistencies
 def normalize_shows(df, col, regroup=False, col_sort='total_count'):
-    print 'HERE'
     df[col] = df[col].str.replace(u"’", "'")
     df[col] = df[col].str.replace(u"", "'")
     df[col] = df[col].str.replace(" - Masterpiece", "")

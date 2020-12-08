@@ -19,7 +19,8 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    'KLRN_export_2_1_2019.zip'
+    'KLRN_export_11_1_2020_generated_at_2020_11_01_05_17_10.zip',    
+    'KLRN_export_12_1_2020_generated_at_2020_12_01_05_15_14.zip'
 ]
 
 
@@ -52,6 +53,11 @@ cur = conn.cursor()
 #cur.execute('''DROP TABLE IF EXISTS Videos''')
 #cur.execute('''DROP TABLE IF EXISTS Views''')
 
+#cur.execute('''
+#    ALTER TABLE Videos
+#    ADD COLUMN cid TEXT	
+# ''')
+
 cur.execute('''
     CREATE TABLE IF NOT EXISTS Members
     (uid TEXT PRIMARY KEY,
@@ -65,9 +71,10 @@ cur.execute('''
 cur.execute('''
     CREATE TABLE IF NOT EXISTS Videos
     (media_id INTEGER PRIMARY KEY,	
-     title TEXT,	
+     title TEXT,          
      content_channel TEXT,	
-     video_length INTEGER)
+     video_length INTEGER,
+     cid TEXT)
  ''')
      
 cur.execute('''
@@ -141,6 +148,8 @@ for file in toParse[:]:
     #validate UID as having 36 characters and four dashes
     df['UID'] = df['UID'].map(validateUID)
     
+    #validate CID using validateUID filter
+    df['CID'] = df['CID'].map(validateUID) 
     
     #VALIDATE INTEGERS    
     #validate Media ID as 9 or 10 digit integer
@@ -188,8 +197,8 @@ for file in toParse[:]:
         cur.execute('''
             INSERT INTO Members 
             (uid, membership_id, alleg_account_id, first_name, last_name, email) 
-              VALUES (:uid, NULLIF(:membership_id, ''), NULLIF(:alleg_account_id, -1), 
-              NULLIF(:first_name, ''), NULLIF(:last_name, ''), NULLIF(:email, ''))
+              VALUES (:uid, NULLIF(:membership_id, ''), NULLIF(:alleg_account_id, -1),
+                      NULLIF(:first_name, ''), NULLIF(:last_name, ''), NULLIF(:email, ''))
                 ON CONFLICT(uid) DO UPDATE SET 
                   membership_id=NULLIF(:membership_id, ''), 
                   alleg_account_id=NULLIF(:alleg_account_id, -1), 
@@ -214,29 +223,33 @@ for file in toParse[:]:
         
         #videos table
         media_id = row['TP Media ID']  	
-        title = row['Title']  	
+        title = row['Title']                 
         content_channel = row['Content Channel']  	
         video_length = row['Total Run Time of the video']
+        cid = row['CID'] 
         
         cur.execute('''
             INSERT INTO Videos 
-            (media_id, title, content_channel, video_length) 
-              VALUES (:media_id, NULLIF(:title, ''), NULLIF(:content_channel, ''), NULLIF(:video_length, -1))
+            (media_id, title, content_channel, video_length, cid) 
+              VALUES (:media_id, NULLIF(:title, ''), NULLIF(:content_channel, ''), 
+                      NULLIF(:video_length, -1), NULLIF(:cid, ''))
                 ON CONFLICT(media_id) DO UPDATE SET
-                  title=NULLIF(:title, ''), 
+                  title=NULLIF(:title, ''),                                    
                   content_channel=NULLIF(:content_channel, ''), 
-                  video_length=NULLIF(:video_length, -1)
+                  video_length=NULLIF(:video_length, -1),
+                  cid=NULLIF(:cid, '')
             ''', 
             {'media_id': media_id, 'title': title, 'content_channel': content_channel, 
-             'video_length': video_length}) 
+             'video_length': video_length, 'cid': cid}) 
             
         #print title    
         
         '''
         print media_id, ' : ', type(media_id)
-        print title, ' : ', type(title)
+        print title, ' : ', type(title)        
         print content_channel, ' : ', type(content_channel)
         print video_length, ' : ', type(video_length)
+        print cid, ' : ', type(cid)
         print ''
         ''' 
         

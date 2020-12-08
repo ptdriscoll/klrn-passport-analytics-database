@@ -21,16 +21,15 @@ to_run = 'reg'
 #to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists/' + 'email renewals 1-16-19.xlsx'
-file_major = 'Lists/' + '.xlsx'
+file_regular = 'Lists\\' + 'Membership email renewal data' + '.xlsx'
+file_major = 'Lists\\' + '' + '.xlsx'
 
 #these are output identifiers
-output_dir = '2019-01'
+output_dir = '2020-11'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2018-12-01'
-#date_start = '2018-06-01'
-date_end = '2019-01-01'
+date_start = '2019-11-02'
+date_end = '2020-11-01'
 
 
 '''
@@ -38,7 +37,7 @@ auto settings
 '''
 
 #where email working folder is
-root_folder = '\\\\ALLEG\\General\\Public Relations\\FILES PATRICK\\Alleg-Web\\Emails\\' + output_dir + '/'
+root_folder = 'T:\\Public Relations\\FILES PATRICK\\Alleg-Web\\Emails\\' + output_dir + '/'
 
 if to_run == 'reg': 
     f = file_regular
