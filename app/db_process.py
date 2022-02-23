@@ -19,8 +19,7 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    'KLRN_export_11_1_2020_generated_at_2020_11_01_05_17_10.zip',    
-    'KLRN_export_12_1_2020_generated_at_2020_12_01_05_15_14.zip'
+    'KLRN_export_2_1_2022_generated_at_2022_02_01_12_02_09.zip'
 ]
 
 
@@ -41,6 +40,9 @@ os.mkdir('processing')
 for file in toParse:
     directoryName = file[:-4]
     newDirectory = os.mkdir('processing/' + directoryName)
+    print
+    print 'downloads/' + file
+    print
     with zipfile.ZipFile('downloads/' + file) as toExtract:
         toExtract.extractall('processing/' + directoryName)    
 

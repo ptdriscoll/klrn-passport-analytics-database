@@ -21,15 +21,17 @@ to_run = 'reg'
 #to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists\\' + 'Membership email renewal data' + '.xlsx'
-file_major = 'Lists\\' + '' + '.xlsx'
+file_regular = 'Lists\\' + 'email renewals 2-14-22' + '.csv'
+file_major = 'Lists\\' + '' + '.csv'
+#file_regular = 'MD Pull 28 Dec' + '.csv'
 
 #these are output identifiers
-output_dir = '2020-11'
+output_dir = '2022-02'
+#output_dir = 'Major-Donors-2022-01'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2019-11-02'
-date_end = '2020-11-01'
+date_start = '2021-02-01'
+date_end = '2022-02-01'
 
 
 '''
@@ -67,7 +69,7 @@ if not os.path.isdir(output_folder):
 get members data
 '''
 
-df_mem = pd.read_excel(root_folder + f)
+df_mem = pd.read_csv(root_folder + f)
 df_mem = df_mem.rename(columns = lambda x: x.strip())
 #print '\n', df_mem.head(10)
 

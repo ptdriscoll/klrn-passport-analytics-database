@@ -103,7 +103,11 @@ ORDER BY row_number, total_count DESC;
 ======================================================================================
 Most popular first channels watched, filtered by time period new members acquired 
 
-First get all unique member ids before Oct. 1
+CONSIDERATION: Instead of filtering all unique ids, considering only filtering
+	for the previous 12 months, so that we can include rejoins 
+
+FIRST, get all unique member ids before Oct. 1, and add as a table to a filter 
+	Passport started in '2016-04-01 00:00:00' but this can also be set to a year before date to pull stats for
 
 SELECT DISTINCT(Members.uid) AS id
 FROM Members
@@ -114,26 +118,53 @@ ORDER BY id
 
 http://www.sqlitetutorial.net/sqlite-window-functions/sqlite-row_number/
 
-SELECT 
-  Videos.content_channel,
-  COUNT(Views.id) AS total_count,
+(SELECT 
+  Videos.content_channel AS shows,
+  Views.id AS views,
   ROW_NUMBER() OVER (
-    PARTITION BY Members.uid
-    ORDER BY Views.date_time
+	PARTITION BY Members.uid
+	ORDER BY Views.date_time
   ) AS row_number  
 FROM Views		
 INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
 INNER JOIN Members ON Views.members_uid = Members.uid
-WHERE Views.date_time >= datetime('2020-10-01 00:00:00', 'localtime')
-AND Views.date_time < datetime('2020-11-01 00:00:00', 'localtime')
+WHERE Views.date_time >= datetime('2021-01-01 00:00:00', 'localtime')
+AND Views.date_time < datetime('2021-02-01 00:00:00', 'localtime')
 AND Members.uid NOT IN (
 	SELECT DISTINCT(Members.uid) AS id
 	FROM Members
 	INNER JOIN Views ON Members.uid = Views.members_uid 
 	WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
-	AND Views.date_time < datetime('2020-10-01 00:00:00', 'localtime')) 
-GROUP BY Videos.content_channel
-ORDER BY row_number, total_count DESC;
+	AND Views.date_time < datetime('2021-01-01 00:00:00', 'localtime'))) new_members_views 
+
+SECOND, nest query (shown below) in another to filter out row_number > before grouping by Videos.content_channel
+
+SELECT
+	new_members_views.shows,
+	COUNT(new_members_views.views) AS total_count,
+	new_members_views.row_number
+FROM	
+	(SELECT 
+	  Videos.content_channel AS shows,
+	  Views.id AS views,
+	  ROW_NUMBER() OVER (
+		PARTITION BY Members.uid
+		ORDER BY Views.date_time
+	  ) AS row_number  
+	FROM Views		
+	INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+	INNER JOIN Members ON Views.members_uid = Members.uid
+	WHERE Views.date_time >= datetime('2020-04-01 00:00:00', 'localtime')
+	AND Views.date_time < datetime('2021-04-01 00:00:00', 'localtime')
+	AND Members.uid NOT IN (
+		SELECT DISTINCT(Members.uid) AS id
+		FROM Members
+		INNER JOIN Views ON Members.uid = Views.members_uid 
+		WHERE Views.date_time >= datetime('2019-04-01 00:00:00', 'localtime')
+		AND Views.date_time < datetime('2020-04-01 00:00:00', 'localtime'))) new_members_views 
+WHERE row_number = 1 		
+GROUP BY shows
+ORDER BY total_count DESC;
 
 ======================================================================================
 Episode views filtered by specific member id/s  
