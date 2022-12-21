@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import pandas as pd
 import sqlite3
 
@@ -8,8 +9,9 @@ import sqlite3
 start and stop searches in below functions use this format 2016-04-01 
 '''
 
-def get_data_in_dataframe(query):
-    conn = sqlite3.connect('database/db.sqlite')
+def get_data_in_dataframe(query):  
+    loc_database = os.path.join(os.path.dirname(__file__), 'database', 'db.sqlite')
+    conn = sqlite3.connect(loc_database)
     df = pd.read_sql_query(query, conn)
     conn.close()
     

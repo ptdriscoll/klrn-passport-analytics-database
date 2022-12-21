@@ -19,7 +19,7 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    'KLRN_export_2_1_2022_generated_at_2022_02_01_12_02_09.zip'
+    '2022_12_01_10_18_42.zip'
 ]
 
 
