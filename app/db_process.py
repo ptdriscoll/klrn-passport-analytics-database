@@ -19,7 +19,7 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    '2022_12_01_10_18_42.zip'
+    '2023_01_01_10_10_56.zip'
 ]
 
 
@@ -57,7 +57,7 @@ cur = conn.cursor()
 
 #cur.execute('''
 #    ALTER TABLE Videos
-#    ADD COLUMN cid TEXT	
+#    ADD COLUMN genre TEXT	
 # ''')
 
 cur.execute('''
@@ -76,7 +76,8 @@ cur.execute('''
      title TEXT,          
      content_channel TEXT,	
      video_length INTEGER,
-     cid TEXT)
+     cid TEXT,
+     genre TEXT)
  ''')
      
 cur.execute('''
@@ -229,20 +230,22 @@ for file in toParse[:]:
         content_channel = row['Content Channel']  	
         video_length = row['Total Run Time of the video']
         cid = row['CID'] 
+        genre = row['Genre']
         
         cur.execute('''
             INSERT INTO Videos 
-            (media_id, title, content_channel, video_length, cid) 
+            (media_id, title, content_channel, video_length, cid, genre) 
               VALUES (:media_id, NULLIF(:title, ''), NULLIF(:content_channel, ''), 
-                      NULLIF(:video_length, -1), NULLIF(:cid, ''))
+                      NULLIF(:video_length, -1), NULLIF(:cid, ''), NULLIF(:genre, ''))
                 ON CONFLICT(media_id) DO UPDATE SET
                   title=NULLIF(:title, ''),                                    
                   content_channel=NULLIF(:content_channel, ''), 
                   video_length=NULLIF(:video_length, -1),
-                  cid=NULLIF(:cid, '')
+                  cid=NULLIF(:cid, ''),
+                  genre=NULLIF(:genre, '')
             ''', 
             {'media_id': media_id, 'title': title, 'content_channel': content_channel, 
-             'video_length': video_length, 'cid': cid}) 
+             'video_length': video_length, 'cid': cid, 'genre': genre}) 
             
         #print title    
         
@@ -252,6 +255,7 @@ for file in toParse[:]:
         print content_channel, ' : ', type(content_channel)
         print video_length, ' : ', type(video_length)
         print cid, ' : ', type(cid)
+        print genre, ' : ', type(genre)
         print ''
         ''' 
         
