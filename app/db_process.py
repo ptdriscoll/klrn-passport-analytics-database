@@ -19,7 +19,7 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    '2023_01_01_10_10_56.zip'
+    'KLRN_export_2_1_2022_generated_at_2022_02_01_12_02_09.zip',
 ]
 
 
@@ -183,6 +183,8 @@ for file in toParse[:]:
     #create date only column, using seconds as an integer
     df['Date Seconds'] = df['Date Watched'].map(dateToSeconds) 
     
+    #add empty Genre column if it doesn't exist
+    if 'Genre' not in df.columns: df['Genre'] = ''   
    
     for index, row in df.iterrows(): 
         start += 1        
@@ -230,7 +232,7 @@ for file in toParse[:]:
         content_channel = row['Content Channel']  	
         video_length = row['Total Run Time of the video']
         cid = row['CID'] 
-        genre = row['Genre']
+        genre = row['Genre']  
         
         cur.execute('''
             INSERT INTO Videos 
