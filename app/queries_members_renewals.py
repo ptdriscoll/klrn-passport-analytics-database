@@ -21,17 +21,17 @@ to_run = 'reg'
 #to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists\\' + 'email renewal 1-16-23' + '.csv'
+file_regular = 'Lists\\' + 'Membership email renewals 10-16-23' + '.csv'
 file_major = 'Lists\\' + '' + '.csv'
 #file_regular = 'MD Pull 28 Dec' + '.csv'
 
 #these are output identifiers
-output_dir = '2023-01'
+output_dir = '2023-10'
 #output_dir = 'Major-Donors-2022-01'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2022-01-01'
-date_end = '2023-01-01'
+date_start = '2022-09-01'
+date_end = '2023-10-01'
 
 
 '''

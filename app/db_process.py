@@ -19,8 +19,12 @@ settings
 
 #multiple files can be listed - which is important to seed start
 toParse = [  
-    'KLRN_export_2_1_2022_generated_at_2022_02_01_12_02_09.zip',
+    '2023_10_01_10_02_25.zip',
 ]
+
+#which file in zip folder to process 
+#(will refactor later to loop and auto check)
+toParseFile = '2'
 
 
 '''
@@ -123,7 +127,7 @@ for file in toParse[:]:
     print 'PROCESSING:', file 
     
     #don't bring in header since it might be in wrong location
-    df = pd.read_csv('processing/' + file[:-4] + '/KLRN/KLRN_1.csv', 
+    df = pd.read_csv('processing/' + file[:-4] + '/KLRN/KLRN_' + toParseFile + '.csv', 
                      header=None, keep_default_na=False,
                      error_bad_lines=False, encoding='utf-8')
     
