@@ -57,7 +57,7 @@ to refactor next section for renewals eblasts:
 mem_ids = [x for x in df_mem['AcctID']]
 
 rows = []
-print('')
+print()
 for id in mem_ids:
     df_views = get_views(date_start, date_end, id)
     shows = df_views['content_channel'].head(num_top_shows) 
@@ -75,8 +75,8 @@ print('\nFINISHED')
 df_shows = pd.DataFrame(rows, columns=cols)
 df_merged = df_mem.merge(df_shows, on='AcctID')
 
-print('')
+print()
 print(df_merged.head())
 
-df_merged.to_csv(output_f, index=False, encoding='utf-8')
+df_merged.to_csv(output_f, index=False, encoding='utf-8-sig')
     

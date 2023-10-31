@@ -35,10 +35,10 @@ def database_backup(db, backup_dir, step=''):
     conn.rollback()
     conn.close()
     
-    print '\nDATABASE BACKED UP:', os.path.basename(output_path)
+    print('\nDATABASE BACKED UP:', os.path.basename(output_path))
 
 def delete_old_backups(backup_dir, days_old=90):
-    print ''
+    print()
     deletions = False
     cutoff_days = time.time() - days_old * 86400
     
@@ -51,6 +51,7 @@ def delete_old_backups(backup_dir, days_old=90):
             if os.stat(pname).st_ctime < cutoff_days:
                 deletions = True
                 os.remove(pname)
-                print 'BACKUP DATABASE DELETED:', os.path.basename(pname)
+                print('BACKUP DATABASE DELETED:', os.path.basename(pname))
                 
-    if not deletions: print 'NO BACKUP DATABASES DELETED'
+    if not deletions: print('NO BACKUP DATABASES DELETED')
+    

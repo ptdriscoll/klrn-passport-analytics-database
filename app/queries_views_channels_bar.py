@@ -5,10 +5,10 @@ from queries import get_channel_views_devices as get_views
 import sys
 sys.path.insert(0, 'T:\\Public Relations\\ONLINE\\Passport\\STATS')
 
-from helpers import normalize_shows
-from Allegiance.helpers import clean_passport_views as clean_views #needed for devices
-from Allegiance.helpers import set_aggregate #also needed for devices
-from Allegiance.helpers import prep_one_bar_horiz as plot
+from helpers_process import normalize_shows
+from helpers_queries import clean_passport_views as clean_views #needed for devices
+from helpers_queries import set_aggregate #also needed for devices
+from helpers_queries import prep_one_bar_horiz as plot
 
 
 '''
@@ -57,13 +57,10 @@ df = df.groupby('show').agg(aggreg_clust)
 df = df.sort_values(by=sort_by, ascending=False)
 df = df[cols]
 
-print '\n', df.head(20)
-#print '\n',cols
-#print plot_devices
-#print aggreg_clust
+print('\n', df.head(20))
+#print('\n', cols)
+#print(plot_devices)
+#print(aggreg_clust)
 
 image = output_head = title.replace(' ', '_') + '.png'
 plot(df, title, root_graphics, image, plot_devices=True)
-
-
-

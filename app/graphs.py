@@ -3,6 +3,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib.ticker as ticker
 
 
 '''
@@ -13,10 +14,23 @@ colors_ms = {
     'blue': [69, 114, 167], 
     'red': [170, 70, 67],   
     'green': [137, 165, 78],
-    'purple': [113, 88, 143],
+    'purple': [113, 88, 143],        
     'cyan': [65, 152, 175],
-    'orange': [219, 132, 61] 
+    'orange': [219, 132, 61], 
 }
+
+colors_pbs = {   
+    'orange': [252, 127, 40], 
+    'blue': [39, 120, 178],   
+    'green': [51, 159, 52],
+}
+
+use = colors_pbs
+colors_list = [
+    use['orange'],
+    use['blue'],
+    use['green'],
+]
 
 
 '''
@@ -25,12 +39,12 @@ functions
 
 #inputf can be a path to csv file or pandas dataframe
 #columns can have any names but ...
-#data in first column must channels, data in second must be views  
+#data in first column must be channels, data in second must be views  
 def pie_chart(inputf, outputf, title_text, include_others=True):  
 
     if isinstance(inputf, str): df = pd.read_csv(inputf)
     elif isinstance(inputf, pd.DataFrame): df = inputf 
-    #print '\n',df.head()  
+    #print('\n', df.head())  
     
     #keep and rename first two columns    
     df = df[df.columns[[0,1]]]
@@ -40,7 +54,7 @@ def pie_chart(inputf, outputf, title_text, include_others=True):
     cut = 5 if include_others else 6
     df_others = df.iloc[cut:]
     df = df.iloc[:cut]
-    print '\n', df   
+    print('\n', df)   
     
     #add others
     if include_others:
@@ -48,14 +62,12 @@ def pie_chart(inputf, outputf, title_text, include_others=True):
         others = df_others.sum()
         others['Channel'] = 'Others'
         df = df.append(others, ignore_index=True) 
-        #print '\n', df
-        #print '\n', others, '\n'
     
     #convert colors into mpl form
     alpha = 0.8
     alpha = 1.0
     colors = []
-    for x in colors_ms.itervalues():
+    for x in colors_ms.values():
         color = []
         for y in x:
             y = float(y) / 255
@@ -70,9 +82,9 @@ def pie_chart(inputf, outputf, title_text, include_others=True):
     
     #callback for autopct
     def show_autopct(x):
-        return ('%1.f%%' % x) if x > 5 else '' 
+        return ('%1.f%%' % x) if x > 2 else '' 
     
-    fig, ax = plt.subplots(1, figsize=(4, 4))
+    fig, ax = plt.subplots(1, figsize=(7, 7))
     
     patches, texts, autotexts = ax.pie(        
         df['Views'],
@@ -80,13 +92,14 @@ def pie_chart(inputf, outputf, title_text, include_others=True):
         colors = colors,
         explode = (0.15, 0.15, 0.15, 0.15, 0.15, 0.15),
         shadow = False,
-        startangle = 60,
+        startangle = 90,
         autopct = show_autopct,
-
+        pctdistance=0.85
     )
     
-    plt.axis('tight')
-    title = fig.suptitle(title_text, color='#777777', size=20, y=1.15)
+    plt.axis('equal')
+    plt.gca().set_aspect('equal', adjustable='box')
+    title = fig.suptitle(title_text, color='#777777', size=20)   
     
     
     '''
@@ -113,9 +126,7 @@ def pie_chart(inputf, outputf, title_text, include_others=True):
     save and show
     '''
     
-    plt.tight_layout()
-    plt.savefig(outputf, dpi=72,
-                bbox_inches='tight', bbox_extra_artist=[title])
+    plt.savefig(outputf, dpi=72, bbox_inches='tight')
     plt.show()
     
     
@@ -123,7 +134,7 @@ def timeline(inputf, outputf, title_text, to_plot=5):
 
     if isinstance(inputf, str): df = pd.read_csv(inputf)
     elif isinstance(inputf, pd.DataFrame): df = inputf 
-    print '\n',df
+    print('\n', df)
     
     text_color = '#666666'
     alpha = 0.4  
@@ -132,7 +143,7 @@ def timeline(inputf, outputf, title_text, to_plot=5):
     #plot
     fig, ax = plt.subplots(1, figsize=(9,4))
     #df = df[df.columns[::-1]] #reverse order of columns
-    print df.columns
+    print(df.columns)
     patches = []
     
     count = 0
@@ -162,7 +173,7 @@ def timeline(inputf, outputf, title_text, to_plot=5):
     
     #add title 
     title_margin = 1.11 + len(patches) * 0.07
-    print '\n', title_margin 
+    print('\n', title_margin) 
     title = fig.suptitle(title_text, color=text_color, size=20, x=0.5, y=title_margin)
     
     
@@ -221,3 +232,136 @@ def timeline(inputf, outputf, title_text, to_plot=5):
     plt.savefig(outputf, dpi=72,
                 bbox_inches='tight', bbox_extra_artist=[title])
     plt.show()
+    
+    
+def one_bar_horiz(folder, img_name, title_text, y_labels, x_data, y_data,
+                  bar_labels=False, bar_labels_inside=True, titlesize=18, labelsize=13):
+
+    #set formatting for x and y labels
+    text_color = '#666666'
+    #height = 0.8
+    
+    #plot
+    fig, ax = plt.subplots(1, figsize=(10, 5))    
+    bars = ax.barh(y_data, x_data, align='center', color='#4682b4', edgecolor='none')    
+    ax.set_title(title_text, color='#777777', size=titlesize, y=1.07)
+
+    #add y_labels
+    ax.set_yticklabels(y_labels)
+   
+    #set y_labels padding
+    ax.set(yticks=range(len(y_data)), ylim=[-1, len(y_data)])
+    ax.tick_params(axis='y', which='major', pad=11)
+
+    #format major x ticks 
+    ax.tick_params(axis='x', which='major', pad=5)
+    ax.get_xaxis().set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+   
+    #remove all tick parameters, lighten colors, and make text smaller
+    ax.tick_params(top='off', right='off', bottom='off', left='off', 
+                    colors=text_color, labelsize=labelsize, which='both')
+    ax.tick_params(axis='y', labelsize=labelsize, which='both')    
+                    
+    #lighten frame
+    for spine in ax.spines.values():
+        spine.set_color('none')
+        spine.set_linewidth(0.3)
+
+    #remove first and last x label ticks
+    xticks1 = ax.xaxis.get_major_ticks()
+    xticks1[0].set_visible(False)   
+    xticks1[-1].set_visible(False)    
+
+    #optional: move x labels to bars 
+    if bar_labels:   
+        #drop x labels    
+        for xtick in ax.xaxis.get_major_ticks():
+            xtick.set_visible(False)
+        
+        #add values to bars
+        #ax.text(x_loc, y_loc, value)
+        for bar in bars:
+            ax.text(
+                bar.get_width() - labelsize/3, 
+                bar.get_y() + bar.get_height()/2,                
+                str(int(bar.get_width())), 
+                va='center', color='w', fontsize=labelsize, fontweight='bold'
+                )
+
+    plt.axis('tight')
+    fig.tight_layout()
+    fig.savefig(folder + '/' + img_name, dpi=100)
+    plt.show()
+    
+
+def one_bar_horiz_3_stack(folder, img_name, title_text, y_labels, x_data, y_data):
+
+    #set formatting for x and y labels
+    text_color = '#666666'
+    height = 0.75
+    
+    #convert colors into mpl form
+    alpha = 0.85
+    colors = []
+    for x in colors_list:
+        color = []
+        for y in x:
+            y = float(y) / 255
+            color.append(y)
+        color = tuple(color + [alpha])  
+        colors.append(color)
+    
+    #plot
+    fig, ax = plt.subplots(1, figsize=(10, 5))  
+    
+    left = 0
+    patches = []     
+    for column, color in zip(x_data, colors):
+        ax.barh(y_data, x_data[column], align='center', color=color, edgecolor='none', left=left, height=height)
+        left += x_data[column]
+        
+        leg_title = column.upper() if column == 'ott' else column.title() 
+        patch = mpatches.Patch(color=color, alpha=alpha, label=leg_title)
+        patches.append(patch)
+        
+    legend = plt.legend(handles=patches, 
+               loc=(0.75, 0.25), fontsize=13.5, frameon=False) #x loc first, then y
+
+    for text in legend.get_texts():
+        plt.setp(text, color='#666666') 
+        
+    plt.axis('tight')        
+    
+    ax.set_title(title_text, color='#777777', size=18, y=1.00)
+
+    #add y_labels
+    ax.set_yticklabels(y_labels)
+    
+    #set y_labels padding
+    ax.set(yticks=range(len(y_data)), ylim=[-1, len(y_data)])
+    ax.tick_params(axis='y', which='major', pad=11)
+
+    #format major x ticks 
+    ax.tick_params(axis='x', which='major', pad=-10)
+    ax.get_xaxis().set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+   
+    #remove all tick parameters, lighten colors, and make text smaller
+    ax.tick_params(top='off', right='off', bottom='off', left='off', 
+                    colors=text_color, labelsize=13, which='both')                    
+    ax.tick_params(axis='y', labelsize=13, which='both')    
+                    
+    #lighten frame
+    for spine in ax.spines.values():
+        spine.set_color('none')
+        spine.set_linewidth(0.3)
+
+    #remove first and last x label ticks
+    xticks1 = ax.xaxis.get_major_ticks()
+    xticks1[0].set_visible(False)   
+    xticks1[-1].set_visible(False)     
+
+    plt.axis('tight')
+    fig.tight_layout()
+    fig.savefig(folder + '/' + img_name, dpi=100)
+    plt.show() 
+    

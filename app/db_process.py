@@ -6,7 +6,7 @@ import zipfile
 import os
 import pandas as pd
 import numpy as np
-from helpers import *
+import helpers_process as helpers 
 from db_backup import database_backup, delete_old_backups 
 
 
@@ -44,9 +44,9 @@ os.mkdir('processing')
 for file in toParse:
     directoryName = file[:-4]
     newDirectory = os.mkdir('processing/' + directoryName)
-    print
-    print 'downloads/' + file
-    print
+    print()
+    print('downloads/' + file)
+    print()
     with zipfile.ZipFile('downloads/' + file) as toExtract:
         toExtract.extractall('processing/' + directoryName)    
 
@@ -111,20 +111,20 @@ except:
 
 
 #parse csv files 
-print '' 
+print() 
 
 #lamda functions for data cleaning, using helpers from helpers.py
-validateInteger = lambda x: validate_integer(x)
-createAllegID = lambda x: create_alleg_id(x)
-validateUID = lambda x: validate_uid(x)
-validateMediaID = lambda x: validate_media_id(x)
-validateDatetime = lambda x: validate_datetime(x)
-dateToSeconds = lambda x: datetime_to_seconds(x)
+validateInteger = lambda x: helpers.validate_integer(x)
+createAllegID = lambda x: helpers.create_alleg_id(x)
+validateUID = lambda x: helpers.validate_uid(x)
+validateMediaID = lambda x: helpers.validate_media_id(x)
+validateDatetime = lambda x: helpers.validate_datetime(x)
+dateToSeconds = lambda x: helpers.datetime_to_seconds(x)
 
 commits = []
 
 for file in toParse[:]: 
-    print 'PROCESSING:', file 
+    print('PROCESSING:', file) 
     
     #don't bring in header since it might be in wrong location
     df = pd.read_csv('processing/' + file[:-4] + '/KLRN/KLRN_' + toParseFile + '.csv', 
@@ -138,7 +138,7 @@ for file in toParse[:]:
     #SET HEADER
     #find header and copy it   
     theHeader = df[df[0] == 'First Name'].values[0]
-    #print theHeader,'\n'
+    #print(theHeader,'\n')
    
     #now remove the unused header    
     df = df[df[0] != 'First Name'] 
@@ -201,7 +201,7 @@ for file in toParse[:]:
         last_name = row['Last Name']
         email = row['Email'] 
         
-        if first_name == np.NaN: check.append(first_name)
+        if first_name == np.NaN: helpers.check.append(first_name)
         
         cur.execute('''
             INSERT INTO Members 
@@ -218,16 +218,16 @@ for file in toParse[:]:
             {'uid': uid, 'membership_id': membership_id, 'alleg_account_id': alleg_account_id, 
              'first_name': first_name, 'last_name': last_name, 'email': email})
         
-        #print first_name, last_name        
+        #print(first_name, last_name)        
         
         '''
-        print uid, ' : ', type(uid)
-        print membership_id, ' : ', type(membership_id)
-        print alleg_account_id, ' : ', type(alleg_account_id)
-        print first_name, ' : ', type(first_name) 
-        print last_name, ' : ', type(last_name)
-        print email, ' : ', type(email)
-        print ''
+        print(uid, ' : ', type(uid))
+        print(membership_id, ' : ', type(membership_id))
+        print(alleg_account_id, ' : ', type(alleg_account_id))
+        print(first_name, ' : ', type(first_name)) 
+        print(last_name, ' : ', type(last_name))
+        print(email, ' : ', type(email))
+        print()
         '''
         
         #videos table
@@ -253,16 +253,16 @@ for file in toParse[:]:
             {'media_id': media_id, 'title': title, 'content_channel': content_channel, 
              'video_length': video_length, 'cid': cid, 'genre': genre}) 
             
-        #print title    
+        #print(title)    
         
         '''
-        print media_id, ' : ', type(media_id)
-        print title, ' : ', type(title)        
-        print content_channel, ' : ', type(content_channel)
-        print video_length, ' : ', type(video_length)
-        print cid, ' : ', type(cid)
-        print genre, ' : ', type(genre)
-        print ''
+        print(media_id, ' : ', type(media_id))
+        print(title, ' : ', type(title))        
+        print(content_channel, ' : ', type(content_channel))
+        print(video_length, ' : ', type(video_length))
+        print(cid, ' : ', type(cid))
+        print(genre, ' : ', type(genre))
+        print()
         ''' 
         
         #views table
@@ -278,52 +278,36 @@ for file in toParse[:]:
             VALUES (NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, ''), NULLIF(?, -1), NULLIF(?, -1), NULLIF(?, ''))''', 
             (uid, media_id, date_time, date_seconds, time_watched, device))
             
-        #print id    
-        #print date_time    
+        #print(id)    
+        #print(date_time)    
         
         '''        
-        print id, ' : ', type(id)
-        print date_time, ' : ', type(date_time)
-        print date_seconds, ' : ', type(date)
+        print(id, ' : ', type(id))
+        print(date_time, ' : ', type(date_time))
+        print(date_seconds, ' : ', type(date))
         
-        print datetime_to_string(date)
-        print time_to_string(time)
+        print(datetime_to_string(date))
+        print(time_to_string(time))
         
-        print time_watched, ' : ', type(time_watched)
-        print device, ' : ', type(device)
-        print '================================\n'
+        print(time_watched, ' : ', type(time_watched))
+        print(device, ' : ', type(device))
+        print('================================\n')
         '''  
         
-        #print '================================\n'
+        #print('================================\n')
         
     #commit file
     conn.commit()
     
     #record results
     commits.append('FILE COMMITTED TO DATABASE: ' + file[:-4]) 
-    df.to_csv('committed/' + file[:-4] + '.csv', index=False, encoding='utf-8') 
+    df.to_csv('committed/' + file[:-4] + '.csv', index=False, encoding='utf-8-sig') 
     #df = df[df.isnull().any(axis=1)] #get all rows with nulls
         
 conn.close()
 database_backup('database/db.sqlite', 'database/archive/')
 delete_old_backups('database/archive/', days_old=190)
 
-print ''
+print()
 for commit in commits:
-    print commit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print(commit)

@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-'''
-reference on byte order mark (BOM) for Windows in pd.to_csv
-http://stackoverflow.com/questions/25788037/pandas-df-to-csvfile-csv-encode-utf-8-still-gives-trash-characters-for-min
-'''
-
 import os
 import pandas as pd
 from queries import get_views_members as get_pass
@@ -71,15 +66,15 @@ get members data
 
 df_mem = pd.read_csv(root_folder + f)
 df_mem = df_mem.rename(columns = lambda x: x.strip())
-#print '\n', df_mem.head(10)
+#print('\n', df_mem.head(10))
 
 df_mem = df_mem.rename(columns={'AcctID': 'id'})
 df_mem['id'] = pd.to_numeric(df_mem['id'], errors='coerce')
 #df_mem = df_mem.dropna()
 df_mem['id'] = df_mem['id'].astype(int) 
 output = 'Total Members:  ' + '{:,}'.format(len(df_mem.id.unique()))
-#print '\n', df_mem.head()
-#print '\n', df_mem.tail()
+#print('\n', df_mem.head())
+#print('\n', df_mem.tail())
 
 
 '''
@@ -94,10 +89,10 @@ df_pass = df_pass.sort_values('alleg_account_id', ascending=True)
 df_pass.columns = ['id', 'count']
 output += '\n\nTotal Passport Viewers:  ' + '{:,}'.format(len(df_pass.id.unique()))
 output += '\nTotal Views ' + '{:,}'.format(df_pass['count'].sum())
-#print '\n',df_pass.head(10)
+#print('\n',df_pass.head(10))
 
 #check for any dups
-#print '\nDUPS IN DF_PASS:',df_pass.set_index('id').index.get_duplicates()
+#print('\nDUPS IN DF_PASS:',df_pass.set_index('id').index.get_duplicates())
 
 df_pass = df_pass.set_index('id')
 
@@ -120,8 +115,8 @@ output += '\n' + str(df_mem_notpass.shape)
 pass_percent = (float(df_mem_pass.shape[0]) / df.shape[0]) * 100
 output += '\nPassport viewers: {0:.0f}%'.format(pass_percent)
 
-df_mem_pass.to_csv(output_folder + output_head + '_pass.csv', index=False, encoding='utf-8')
-df_mem_notpass.to_csv(output_folder + output_head + '_notpass.csv', index=False, encoding='utf-8')
+df_mem_pass.to_csv(output_folder + output_head + '_pass.csv', index=False, encoding='utf-8-sig')
+df_mem_notpass.to_csv(output_folder + output_head + '_notpass.csv', index=False, encoding='utf-8-sig')
 
 
 '''
@@ -131,11 +126,11 @@ get segmented channel and episode viewers
 df = df_mem_pass.copy()
 
 #clean dups
-output += '\n\nDUPS IN df: ' + str(df.set_index('id').index.get_duplicates())
-df = df.drop_duplicates()
+output += '\n\nDUPS IN df: ' + str(df['id'][df['id'].duplicated()])
+df = df.drop_duplicates(subset=['id'])
 df = df.set_index('id')
 cols = df.columns.tolist()
-#print '\nCHECK DEDUP:\n',df.loc[[290825, 451922, 1237064, 1499961]]
+
 
 #run search based on segmented member ids
 mem_pass_ids = df.index.values.tolist()
@@ -164,20 +159,20 @@ df_episodes = df_views.copy()
 df_episodes = df_episodes.groupby(['channel', 'title'])[['count']].sum()
 df_episodes = df_episodes.sort_values('count', ascending=False)
 df_episodes = df_episodes.reset_index(level='title')
-output += '\n\n\nTOP EPISODES:\n' + df_episodes.set_index('title', drop=True).head(10).to_string()
-output += '\n\n\nTOP EPISODES (SHOW CHANNELS)\n' + df_episodes.drop('title', axis=1).head(10).to_string()
+output += '\n\n\nTOP EPISODES\n' + df_episodes.head(10).to_string()
+output += '\n'
 
 df_episodes.to_csv(output_folder + output_head + '_episodes_' + output_tail + '.csv', encoding='utf-8-sig')
 
 with open(output_folder + output_head + output_tail + '.txt', 'w') as of:  
-    of.write(output.encode('utf-8'))
+    of.write(output)
  
-print '\n', output
+print('\n', output)
 
 #plot image of top channels   
 inputf = df_channels.reset_index()      
 outputf = output_folder + output_head + '.png'
-print outputf
+print(outputf)
 include_others = True
 
 pie_chart(inputf, outputf, title, include_others) 
