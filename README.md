@@ -10,7 +10,7 @@ This works with Python and the Python libraries NumPy and pandas. So make sure t
 
 After cloning the application to your working environment, open the app folder and add the monthly Passport Zip files to the downloads folder.
 
-Also in the app folder, open the **db_process.py** file. Under settings at the top, add all the Zip file names to the toParse list.
+Also in the app folder, open **db_process.py**. Under settings at the top, add all the Zip file names to the toParse list.
 
 For example:
 
