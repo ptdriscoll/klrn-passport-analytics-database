@@ -132,7 +132,7 @@ for file in toParse[:]:
     
         #don't bring in header since it might be in wrong location
         df = pd.read_csv(csvFilePath, header=None, keep_default_na=False,
-                         error_bad_lines=False, encoding='utf-8')
+                         on_bad_lines='skip', encoding='utf-8')
         
         #strip leading and trailing white spaces on all string data     
         for col in df.columns: 
