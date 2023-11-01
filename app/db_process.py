@@ -133,7 +133,7 @@ for file in toParse[:]:
     
     #strip leading and trailing white spaces on all string data     
     for col in df.columns: 
-        if df[col].dtype == np.object: df[col] = df[col].str.strip()
+        if df[col].dtype == object: df[col] = df[col].str.strip()
             
     #SET HEADER
     #find header and copy it   
