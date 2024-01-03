@@ -332,21 +332,21 @@ def one_bar_horiz_3_stack(folder, img_name, title_text, y_labels, x_data, y_data
         
     plt.axis('tight')        
     
-    ax.set_title(title_text, color='#777777', size=18, y=1.00)
-
-    #add y_labels
-    ax.set_yticklabels(y_labels)
-    
+    ax.set_title(title_text, color='#777777', size=18, y=1.00)  
+   
     #set y_labels padding
     ax.set(yticks=range(len(y_data)), ylim=[-1, len(y_data)])
     ax.tick_params(axis='y', which='major', pad=11)
+    
+    #add y_labels
+    ax.set_yticklabels(y_labels)  
 
     #format major x ticks 
     ax.tick_params(axis='x', which='major', pad=-10)
     ax.get_xaxis().set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
    
     #remove all tick parameters, lighten colors, and make text smaller
-    ax.tick_params(top='off', right='off', bottom='off', left='off', 
+    ax.tick_params(top=False, right=False, bottom=False, left=False, 
                     colors=text_color, labelsize=13, which='both')                    
     ax.tick_params(axis='y', labelsize=13, which='both')    
                     
