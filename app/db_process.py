@@ -20,7 +20,10 @@ settings
 
 #multiple zip files can be listed - which is important to seed start
 toParse = [  
-    '2024_01_01_10_04_00.zip',
+    '2024_02_05_12_50_07.zip',
+    'Regenerate_2023_December__2024_02_05_15_51_05.zip',
+    'Regenerate_2023_November__2024_02_05_15_29_10.zip',
+    'Regenerate_2023_October__2024_02_05_14_53_37.zip',
 ]
 
 
@@ -107,7 +110,6 @@ except:
 
 
 #parse csv files 
-print() 
 
 #lamda functions for data cleaning, using helpers from helpers.py
 validateInteger = lambda x: helpers.validate_integer(x)
@@ -120,7 +122,7 @@ dateToSeconds = lambda x: helpers.datetime_to_seconds(x)
 commits = []
 
 for file in toParse[:]:     
-    print('PROCESSING DIRECTORY:', file) 
+    print('\nPROCESSING DIRECTORY:', file) 
     
     directoryName = file.rstrip('.zip')
     pathToCsvFiles = 'processing/' + directoryName + '/KLRN/'
