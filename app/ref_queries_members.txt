@@ -184,6 +184,22 @@ GROUP BY Videos.title, Members.alleg_account_id
 ORDER BY total_count DESC; 
 
 ======================================================================================
+Episode viewing history filtered by specific member id/s and ordered by formatted dates 
+
+SELECT 
+  Videos.content_channel,
+  Videos.title,
+  Members.alleg_account_id,
+  strftime('%Y-%m-%d %H:%M:%S', Views.date_time) AS formatted_date_time
+FROM Views	
+INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+INNER JOIN Members ON Views.members_uid = Members.uid
+WHERE Views.date_time >= datetime('2016-04-01 00:00:00', 'localtime')
+AND Views.date_time <= datetime('2024-06-01 00:00:00', 'localtime')
+AND Members.alleg_account_id IN (2079945)
+ORDER BY formatted_date_time; 
+
+======================================================================================
 Episode viewing amounts and video lengths per member id  
 
 SELECT 
