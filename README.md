@@ -61,7 +61,11 @@ Running a visualization file will create an output_tables folder with a csv file
 
 Files starting with **queries_members\_** are customized to interact with Excel downloads resulting from specific queries made to an Allegiance database (KLRN's membership RMS).
 
-In the app folder, **queries_members_personalized.py** gets top shows watched for each KLRN member listed in a spreadsheet, **queries_members_renewals.py** aggregates top shows for a list of members, and **queries_members_segments.py** gets top shows by first-time donors, major donors and sustainers.
+In the app folder:
+
+- **queries_members_personalized.py** gets top shows watched for each KLRN member listed in a spreadsheet
+- **queries_members_renewals.py** aggregates top shows for a list of members
+- **queries_members_segments.py** gets top shows by first-time donors, major donors and sustainers
 
 ### Other files
 
