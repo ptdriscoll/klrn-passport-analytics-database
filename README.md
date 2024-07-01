@@ -73,6 +73,11 @@ These files store background functions:
 - **helpers_queries.py**
 - **queries.py**
 
+These are reference files for SQL queries:
+
+- **ref_queries.txt**
+- **ref_queries_members.txt**
+
 ### References
 
 - https://www.python.org/
