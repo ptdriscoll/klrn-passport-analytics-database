@@ -85,6 +85,28 @@ def get_channel_views_members(date_start, date_end, ids):
     '''.format(date_start, date_end, ids)
 
     return get_data_in_dataframe(query)    
+
+def get_channel_views_genres_members(date_start, date_end, ids):
+    """
+    Unlike most other queries, this is sorted by date so that a code aggregation can get latest genre values.
+    """
+    query = '''
+        SELECT 
+          Videos.content_channel,
+          Members.alleg_account_id,
+          COUNT(Views.id) AS total_count,
+          Videos.genre
+        FROM Views	
+        INNER JOIN Videos ON Views.videos_media_id = Videos.media_id  
+        INNER JOIN Members ON Views.members_uid = Members.uid
+        WHERE Views.date_time >= datetime('{} 00:00:00', 'localtime')
+        AND Views.date_time <= datetime('{} 00:00:00', 'localtime')
+        AND Members.alleg_account_id IN ({})
+        GROUP BY Videos.content_channel, Members.alleg_account_id
+        ORDER BY Views.date_time;
+    '''.format(date_start, date_end, ids)
+
+    return get_data_in_dataframe(query)  
  
 def get_channel_episodes_views_members(date_start, date_end, ids):
     query = '''
