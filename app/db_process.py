@@ -20,7 +20,7 @@ settings
 
 #multiple zip files can be listed - which is important to seed start
 toParse = [  
-    '2024_08_01_10_16_00.zip',
+    '2025_03_01_10_14_30.zip',
 ]
 
 
