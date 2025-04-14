@@ -20,7 +20,7 @@ settings
 
 #multiple zip files can be listed - which is important to seed start
 toParse = [  
-    '2025_03_01_10_14_30.zip',
+    '2025_04_01_10_03_04.zip',
 ]
 
 
@@ -136,72 +136,78 @@ for file in toParse[:]:
         #strip leading and trailing white spaces on all string data     
         for col in df.columns: 
             if df[col].dtype == object: df[col] = df[col].str.strip()
+            
                 
         #SET HEADER
         #find header and copy it   
         theHeader = df[df[0] == 'First Name'].values[0]
-        #print(theHeader,'\n')
+        #print('\n', theHeader,'\n')
        
         #now remove the unused header    
         df = df[df[0] != 'First Name'] 
         
         #and replace the dataframe default with the copied header
-        df.columns = theHeader
-        
+        df.columns = [col.lower() for col in theHeader]
+        #print('\n', df.columns)
+
         #Sort by date and drop duplicate rows
-        df = df.sort_values(by=['Date Watched'])
-        df = df.drop_duplicates()
+        df = df.sort_values(by=['date watched'])
+        df = df.drop_duplicates()  
         
         
         #START VALIDATION    
         #validate UID as having 36 characters and four dashes
-        df['UID'] = df['UID'].map(validateUID)
+        df['uid'] = df['uid'].map(validateUID)
         
         #validate CID using validateUID filter
-        df['CID'] = df['CID'].map(validateUID) 
+        df['cid'] = df['cid'].map(validateUID) 
         
         #VALIDATE INTEGERS    
         #validate Media ID as 9 or 10 digit integer
-        df['TP Media ID'] = df['TP Media ID'].map(validateMediaID)
+        df['tp media id'] = df['tp media id'].map(validateMediaID)
         
         #drop rows with invalid UIDs or Media IDs
-        df = df[(df['UID'] != '') & (df['TP Media ID'] != 0)] 
+        df = df[(df['uid'] != '') & (df['tp media id'] != 0)] 
         
         #validate Membership ID as valid integer, and slice it to create Alleg ID
-        df['Alleg ID'] = df['Membership ID'].map(createAllegID)
+        df['alleg id'] = df['membership id'].map(createAllegID)
     
         #validate Video Length as integer
-        df['Total Run Time of the video'] = df['Total Run Time of the video'].map(validateInteger)
+        df['total run time of the video'] = df['total run time of the video'].map(validateInteger)
     
         #validate Time Watched as integer
-        df['Time Watched'] = df['Time Watched'].map(validateInteger)  
+        df['time watched'] = df['time watched'].map(validateInteger)  
         
         
         #VALIDATE EMAIL        
         #check that emails have @, replace with blank if not
-        df['Email'] = np.where(df['Email'].str.contains('@'), df['Email'], '')
+        df['email'] = np.where(df['email'].str.contains('@'), df['email'], '')
         
         
         #VALIDATE TIMES    
         #check that date_times at least have valid IS0-8601 date, replace with blank if not
-        df['Date Watched'] = df['Date Watched'].map(validateDatetime)
+        df['date watched'] = df['date watched'].map(validateDatetime)
         
         #create date only column, using seconds as an integer
-        df['Date Seconds'] = df['Date Watched'].map(dateToSeconds) 
+        df['date seconds'] = df['date watched'].map(dateToSeconds) 
         
-        #add empty Genre column if it doesn't exist
-        if 'Genre' not in df.columns: df['Genre'] = ''   
-       
+        #add empty Genre column if it doesn't exist, replace any NaN or 'NULL' with ''
+        if 'genre' not in df.columns: df['genre'] = ''  
+        df['genre'] = df['genre'].fillna('') # handle real NaN
+        df['genre'] = df['genre'].apply(lambda x: '' if x in ['NULL', 'None'] else x)
+        
+        
+        #INSERT INTO DATABASE
         for index, row in df.iterrows(): 
             start += 1        
     
             #members table
-            uid = row['UID']
-            membership_id = row['Membership ID']  
-            alleg_account_id = row['Alleg ID']    
-            first_name = row['First Name'] 	
-            last_name = row['Last Name']
-            email = row['Email'] 
+            uid = row['uid']
+            membership_id = row['membership id']  
+            alleg_account_id = row['alleg id']    
+            first_name = row['first name'] 	
+            last_name = row['last name']
+            email = row['email'] 
             
             if first_name == np.NaN: helpers.check.append(first_name)
             
@@ -233,12 +239,12 @@ for file in toParse[:]:
             '''
             
             #videos table
-            media_id = row['TP Media ID']  	
-            title = row['Title']                 
-            content_channel = row['Content Channel']  	
-            video_length = row['Total Run Time of the video']
-            cid = row['CID'] 
-            genre = row['Genre']  
+            media_id = row['tp media id']  	
+            title = row['title']                 
+            content_channel = row['content channel']  	
+            video_length = row['total run time of the video']
+            cid = row['cid'] 
+            genre = row['genre']  
             
             cur.execute('''
                 INSERT INTO Videos 
@@ -269,10 +275,10 @@ for file in toParse[:]:
             
             #views table
             id = start #not using after all - auto incrementing instead   
-            date_time = row['Date Watched']  
-            date_seconds = row['Date Seconds']  
-            time_watched = row['Time Watched']
-            device = row['Device'] 
+            date_time = row['date watched']  
+            date_seconds = row['date seconds']  
+            time_watched = row['time watched']
+            device = row['device'] 
             
             cur.execute('''
                 INSERT OR IGNORE INTO Views 
