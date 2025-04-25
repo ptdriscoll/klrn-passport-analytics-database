@@ -16,16 +16,16 @@ to_run = 'reg'
 #to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists\\' + 'Email renewal list' + '.xlsx'
+file_regular = 'Lists\\' + 'membership email renewal 4-21-25' + '.xlsx'
 file_major = 'Lists\\' + '' + '.xlsx'
 
 #these are output identifiers
-output_dir = '2025-03'
+output_dir = '2025-04'
 #output_dir = 'Major-Donors-2022-01'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2024-03-01'
-date_end = '2025-03-01'
+date_start = '2024-04-01'
+date_end = '2025-04-01'
 
 
 '''

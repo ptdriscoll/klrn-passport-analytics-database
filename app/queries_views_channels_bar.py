@@ -18,8 +18,8 @@ settings
 #SEARCH DATES
 date_start = '2016-04-01' #date Passport started
 
-date_start = '2025-03-01'
-date_end = '2025-04-31'
+date_start = '2024-01-01'
+date_end = '2024-12-31'
 
 title = 'Top Channel Views'
 
@@ -64,3 +64,6 @@ print('\n', df.head(20))
 
 image = output_head = title.replace(' ', '_') + '.png'
 plot(df, title, root_graphics, image, plot_devices=True)
+
+table_output_path = f'{root_tables}/{output_head}_{date_start}_{date_end}.csv'
+df.to_csv(table_output_path, encoding='utf-8-sig')
