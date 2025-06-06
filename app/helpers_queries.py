@@ -27,7 +27,8 @@ def map_devices(x):
         'PartnerPlayer': 'Browser',
         'TVOS App': 'OTT',
         'Samsung TV': 'OTT',
-        'Vizio TV': 'OTT'    
+        'Vizio TV': 'OTT',
+        'comcastx1': 'OTT'
     }
     
     views = x['views']
