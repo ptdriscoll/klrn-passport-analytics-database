@@ -18,8 +18,8 @@ settings
 #SEARCH DATES
 date_start = '2016-04-01' #date Passport started
 
-date_start = '2025-05-01'
-date_end = '2025-05-31'
+date_start = '2025-01-01'
+date_end = '2025-12-31'
 
 title = 'Top Channel Views'
 
