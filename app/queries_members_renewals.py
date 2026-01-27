@@ -16,16 +16,16 @@ to_run = 'reg'
 #to_run = 'maj'
 
 #name of working file
-file_regular = 'Lists\\' + 'Membership email data 5-27-25' + '.xlsx'
+file_regular = 'Lists\\' + 'Membership Renewal 012726' + '.xlsx'
 file_major = 'Lists\\' + '' + '.xlsx'
 
 #these are output identifiers
-output_dir = '2025-05'
+output_dir = '2026-01'
 #output_dir = 'Major-Donors-2022-01'
 
 #MAKE SURE TO CHANGE SEARCH DATES
-date_start = '2024-05-01'
-date_end = '2025-05-01'
+date_start = '2025-01-01'
+date_end = '2026-01-01'
 
 
 '''
@@ -65,6 +65,7 @@ get members data
 
 df_mem = pd.read_excel(root_folder + f)
 df_mem = df_mem.rename(columns = lambda x: x.strip())
+df_mem = df_mem.dropna(how="all")
 #print('\n', df_mem.head(10))
 
 df_mem = df_mem.rename(columns={'AcctID': 'id'})
