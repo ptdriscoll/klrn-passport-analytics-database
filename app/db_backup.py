@@ -3,7 +3,6 @@
 import os, errno
 import datetime
 import sqlite3
-import shutil
 import time
 
 
@@ -21,20 +20,18 @@ def database_backup(db, backup_dir, step=''):
         step = '_' + step
     date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S') 
     output_file = '{}'.format(date) + step + '.sqlite'
-    output_path = os.path.join(backup_dir, output_file)
-
-    conn = sqlite3.connect(db)
-    cur = conn.cursor()
+    output_path = os.path.join(backup_dir, output_file)    
     
-    #lock database from any writes or updates
-    cur.execute('BEGIN EXCLUSIVE')
-
-    shutil.copyfile(db, output_path)
-
-    #unlock database
-    conn.rollback()
-    conn.close()
+    #create backup
+    src_conn = sqlite3.connect(db)
+    dst_conn = sqlite3.connect(output_path)
     
+    with dst_conn:
+        src_conn.backup(dst_conn)
+        
+    dst_conn.close()
+    src_conn.close()    
+  
     print('\nDATABASE BACKED UP:', os.path.basename(output_path))
 
 def delete_old_backups(backup_dir, days_old=90):
@@ -54,4 +51,4 @@ def delete_old_backups(backup_dir, days_old=90):
                 print('BACKUP DATABASE DELETED:', os.path.basename(pname))
                 
     if not deletions: print('NO BACKUP DATABASES DELETED')
-    
+   
