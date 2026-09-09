@@ -28,7 +28,9 @@ def map_devices(x):
         'TVOS App': 'OTT',
         'Samsung TV': 'OTT',
         'Vizio TV': 'OTT',
-        'comcastx1': 'OTT'
+        'comcastx1': 'OTT',
+        'LG TV': 'OTT',
+        'Amazon OS TV': 'OTT'
     }
     
     views = x['views']
